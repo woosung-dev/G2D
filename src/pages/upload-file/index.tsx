@@ -27,7 +27,7 @@ export default function UploadFile() {
       // TODO: 파일 확장자 확인 해당 형식으로 받아올 수 있도록
       fileDownload(resp.data, '3D-object-file');
 
-      setStatus(resp.status === 200 ? 'Thank you!' : 'Error.');
+      setStatus(resp.status === 200 ? 'Success!' : 'Error.');
     } catch (error) {
       console.log(error);
     }

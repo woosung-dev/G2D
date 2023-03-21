@@ -11,7 +11,9 @@ export default function ChatText() {
   const onSubmit = async (v: string | undefined) => {
     try {
       setIsolating(true);
-      const { data } = await axios.post('/api/call?type=Text');
+      const { data } = await axios.post('/api/call?type=Text', {
+        data: { Text: v },
+      });
       console.log(data);
 
       setResult(data as unknown as string);
@@ -23,8 +25,8 @@ export default function ChatText() {
   };
 
   return (
-    <>
-      <div className="">
+    <div className={style['form-layout']}>
+      <div>
         <input
           name="text"
           placeholder="원하시는 특성을 입력해주세요."
@@ -32,7 +34,7 @@ export default function ChatText() {
           value={text}
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500"
         />
-        <button type="button" onClick={() => onSubmit(text)}>
+        <button type="button" onClick={() => onSubmit(text)} className={style['btn']}>
           Submit
         </button>
       </div>
@@ -47,6 +49,6 @@ export default function ChatText() {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }
