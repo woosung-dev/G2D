@@ -12,7 +12,8 @@ const nextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: 'http://localhost:8000/api/:path*',
+        // TODO: 임시 원격 서버로 연결하기 위한 설정 이후 배포 서버별 주소 설정 되도록 변경
+        destination: 'http://15.164.185.93:5000/:path*',
       },
     ]
   },

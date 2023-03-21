@@ -11,7 +11,7 @@ export default function ChatText() {
   const onSubmit = async (v: string | undefined) => {
     try {
       setIsolating(true);
-      const { data } = await axios.get('/api/text', { params: { text: v } });
+      const { data } = await axios.post('/api/call?type=Text');
       console.log(data);
 
       setResult(data as unknown as string);
@@ -42,6 +42,7 @@ export default function ChatText() {
           <>loading...</>
         ) : (
           <div className={style['content-item']}>
+            {/* TODO: 입력 형식이 확정되면 해당 형식 출력 */}
             <span>{JSON.stringify(result)}</span>
           </div>
         )}
