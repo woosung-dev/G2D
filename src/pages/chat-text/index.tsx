@@ -11,7 +11,7 @@ export default function ChatText() {
   const onSubmit = async (v: string | undefined) => {
     try {
       setIsolating(true);
-      const { data } = await axios.post('/api/call?type=Text', {
+      const { data } = await axios.post('/api/call?type=Diffusion', {
         data: { Text: v },
       });
       console.log(data);
