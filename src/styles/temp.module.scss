@@ -1,0 +1,50 @@
+// 슬라이더 layout 등
+.slider-wrapper {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    
+    min-width: 100%;
+    min-height: 500px;
+    background-color: #dadada;
+}
+
+.slider-title {
+    width: 800px;
+    text-align: center;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+}
+
+.slider-description {
+    min-width: 800px;
+    text-align: center;
+    align-items: center;
+ }
+
+ .category-layout-wrapper {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+ }
+.category-wrapper {
+    margin: 50px 0;
+}
+
+.category-title {
+    font-size: 1.25em;
+    cursor: pointer;
+}
+
+.category-items {
+    display: flex;
+    gap: 20px;
+    padding: 10px 5px;
+}
+
+.category-item {
+
+    gap: 20px;
+    padding: 0px 20px;
+}
