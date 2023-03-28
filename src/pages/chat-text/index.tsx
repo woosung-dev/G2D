@@ -26,7 +26,7 @@ export default function ChatText() {
 
   return (
     <div className={style['form-layout']}>
-      <div>
+      <div className="p-20">
         <input
           name="text"
           placeholder="원하시는 특성을 입력해주세요."
