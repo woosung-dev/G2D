@@ -1,3 +1,4 @@
+import Link from "next/link";
 import style from "./header.module.scss";
 
 export default function Header() {
@@ -11,8 +12,9 @@ export default function Header() {
 					</a>
 				</div>
 				<div className={style["header-left"]}>
-					<a href="/chat-text">Create</a>
-					<a href="upload-file">upload</a>
+					<Link href="/chat-text">Text</Link>
+					<Link href="upload-file">Image</Link>
+					<Link href="upload-diffusion">Diffusion</Link>
 				</div>
 			</div>
 		</>

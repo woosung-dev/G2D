@@ -6,12 +6,14 @@
 		"dev": "next dev",
 		"build": "next build",
 		"start": "next start",
-    "start:local": "next build && next start",
+		"start:local": "next build && next start",
 		"lint": "next lint",
 		"format": "prettier --check --ignore-path .gitignore .",
 		"format:fix": "prettier --write --ignore-path .gitignore ."
 	},
 	"dependencies": {
+		"@react-three/drei": "^9.61.1",
+		"@react-three/fiber": "^8.12.0",
 		"@types/node": "18.15.3",
 		"@types/react": "18.0.28",
 		"@types/react-dom": "18.0.11",
@@ -20,9 +22,12 @@
 		"next": "13.2.4",
 		"react": "18.2.0",
 		"react-dom": "18.2.0",
+		"react-three-fiber": "^6.0.13",
+		"three": "^0.151.2",
 		"typescript": "5.0.2"
 	},
 	"devDependencies": {
+		"@types/three": "^0.150.0",
 		"@typescript-eslint/eslint-plugin": "^5.55.0",
 		"@typescript-eslint/parser": "^5.55.0",
 		"autoprefixer": "^10.4.14",

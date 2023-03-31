@@ -12,7 +12,7 @@ export default function ChatText() {
 		try {
 			setIsolating(true);
 			const { data } = await axios.post(
-				"/api/call?type=Diffusion",
+				"/api/call?type=Text",
 				{
 					data: { Text: v },
 				},

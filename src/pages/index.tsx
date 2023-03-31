@@ -30,7 +30,7 @@ export default function Home() {
 						key={`category-wrapper-${index}`}
 					>
 						<div className={style["category-title"]}>
-							<Link href="/chat-text">
+							<Link href="/model">
 								{v.category} {">"}
 							</Link>
 						</div>
