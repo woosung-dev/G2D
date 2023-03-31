@@ -17,6 +17,7 @@ export default function Home() {
 						alt="Picture of the cat"
 						width={500}
 						height={500}
+						placeholder="blur"
 					/>
 				</div>
 			</div>
@@ -42,6 +43,7 @@ export default function Home() {
 											alt="Picture of the dog"
 											width={250}
 											height={250}
+											placeholder="blur"
 										/>
 									</div>
 									<div>{d.name}</div>
