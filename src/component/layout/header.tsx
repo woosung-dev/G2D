@@ -5,14 +5,15 @@ export default function Header() {
 		<>
 			<div className={style["header"]}>
 				<div>
-					{/* <img src="/public/favicon.ico" alt="test-image" /> */}
 					<a href="/" className={style["logo"]}>
-						Logo C2D
+						<img src="/favicon.ico" alt="test-image" width={25} height={25} />{" "}
+						C2D
 					</a>
 				</div>
 				<div className={style["header-left"]}>
+					<a href="/gtd">New</a>
 					<a href="/chat-text">Create</a>
-					<a href="upload-file">upload</a>
+					<a href="upload-file">Upload</a>
 				</div>
 			</div>
 		</>
