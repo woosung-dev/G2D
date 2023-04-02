@@ -16,6 +16,8 @@
 }
 
 .header a.logo {
+	display: flex;
+	gap: 10px;
 	font-size: 25px;
 	font-weight: bold;
 	margin-right: 50px;
