@@ -21,7 +21,7 @@ export default function G2D() {
 			setIsolating(true);
 			const { data } = await axios.get("/api/call?type=discriminate", {
 				params: { text: search },
-				timeout: 10000,
+				timeout: 20000,
 			});
 			console.log(data); //check
 
@@ -67,10 +67,10 @@ export default function G2D() {
 				headers: {
 					"content-type": "multipart/form-data",
 				},
-				timeout: 30000,
+				timeout: 0,
 				responseType: "blob",
 			});
-			console.log(resp); //check
+			console.log("resp", resp); //check
 
 			// TODO: 파일 확장자 확인 해당 형식으로 받아올 수 있도록
 			fileDownload(resp.data, "3D-object-file.ply");
