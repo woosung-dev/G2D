@@ -16,9 +16,7 @@ export default function Hero() {
 					own prompts.
 				</p>
 				<div className="flex justify-center">
-					<button className="inline-flex px-6 py-2 text-lg text-white bg-indigo-500 border-0 rounded focus:outline-none hover:bg-indigo-600">
-						Find a prompt
-					</button>
+					<button className="btn-project">Find a prompt</button>
 					<button className="inline-flex px-6 py-2 ml-4 text-lg text-gray-700 bg-gray-100 border-0 rounded focus:outline-none hover:bg-gray-200">
 						Sell a prompt
 					</button>
