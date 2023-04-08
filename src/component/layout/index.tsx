@@ -13,12 +13,12 @@ export const metadata = {
 
 export default function Layout({ children }: { children: React.ReactNode }) {
 	return (
-		<>
+		<div className="bg-primary">
 			<Header />
 			{/* <Navbar /> */}
 			<main>{children}</main>
 			{/* TODO: 푸터 추가해야함 현재 추가시 컨텐츠가 없어서 중간에 위치하기 때문에 일단 보류 */}
 			<Footer />
-		</>
+		</div>
 	);
 }
