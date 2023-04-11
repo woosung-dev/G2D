@@ -3,6 +3,7 @@ import Head from "next/head";
 import Hero from "@/component/home/hero";
 import dogSrc from "../../public/dog-1.jpg";
 import Image from "next/image";
+import Layout from "@/component/layout";
 
 export default function Home() {
 	return (
@@ -32,53 +33,40 @@ export default function Home() {
 											{v.data.map((data, index) => {
 												return (
 													// eslint-disable-next-line react/jsx-key
-													<div className="p-4 md:w-1/6" key={`row-${index}`}>
+													<div
+														className="m-4 cursor-pointer item-card md:w-1/6"
+														key={`row-${index}`}
+													>
 														<div className="h-full overflow-hidden border-2 border-gray-200 rounded-lg border-opacity-60">
 															<Image
 																src={dogSrc}
 																alt="Picture of the dog"
 																// placeholder="blur"
 															/>
-															<div className="p-6">
+															<div className="p-4">
 																<h2 className="mb-1 text-xs font-medium tracking-widest text-gray-400 title-font">
 																	CATEGORY
 																</h2>
 																<h1 className="mb-3 text-lg font-medium text-gray-900 title-font">
 																	The Dog
 																</h1>
-																<p className="mb-3 leading-relaxed">
-																	A photo of a white bulldog sitting in the
-																	meadow.
-																</p>
 																<div className="flex flex-wrap items-center ">
-																	<a className="inline-flex items-center text-indigo-500 md:mb-2 lg:mb-0">
-																		Learn More
-																		<svg
-																			className="w-4 h-4 ml-2"
-																			viewBox="0 0 24 24"
-																			stroke="currentColor"
-																			strokeWidth="2"
-																			fill="none"
-																			strokeLinecap="round"
-																			strokeLinejoin="round"
-																		>
-																			<path d="M5 12h14"></path>
-																			<path d="M12 5l7 7-7 7"></path>
-																		</svg>
-																	</a>
 																	<span className="inline-flex items-center py-1 pr-3 ml-auto text-sm leading-none text-gray-400 border-gray-200 lg:ml-auto md:ml-0">
 																		<svg
-																			className="w-4 h-4 mr-1"
-																			stroke="currentColor"
-																			strokeWidth="2"
+																			xmlns="http://www.w3.org/2000/svg"
 																			fill="none"
-																			strokeLinecap="round"
-																			strokeLinejoin="round"
 																			viewBox="0 0 24 24"
+																			strokeWidth="1.5"
+																			stroke="currentColor"
+																			className="w-6 h-6 mr-1"
 																		>
-																			<path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"></path>
+																			<path
+																				strokeLinecap="round"
+																				strokeLinejoin="round"
+																				d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+																			/>
 																		</svg>
-																		2
+																		2.59
 																	</span>
 																</div>
 															</div>

@@ -22,8 +22,9 @@ export default function Header() {
 							Generate
 						</Link>
 						{/* TODO: 클릭 및 드롭다운 가능하도록 변경 dark mode 해당 부분 안에 포함*/}
-						<Link href={"/account"} className="mr-5 hover:text-gray-900">
-							Account
+						{/* TODO: login 상태에 따라서 변경 기본 Login 이후 mypage 나 accout */}
+						<Link href={"/login"} className="mr-5 hover:text-gray-900">
+							Login
 						</Link>
 						{/* TODO: 아이콘 또는 특별한 표시 추가 해야함 */}
 						<Link href={"/sell"} className="mr-5 hover:text-gray-900">
