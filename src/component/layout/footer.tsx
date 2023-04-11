@@ -10,6 +10,7 @@ export default function Footer() {
 							href="/"
 							className="flex items-center justify-center font-medium text-gray-900 title-font md:justify-start"
 						>
+							<img src="/favicon.ico" alt="test-image" width={25} height={25} />
 							<span className="ml-3 text-xl">G2D</span>
 						</Link>
 

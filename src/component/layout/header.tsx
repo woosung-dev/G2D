@@ -14,14 +14,20 @@ export default function Header() {
 						<span className="ml-3 text-xl">G2D</span>
 					</Link>
 					<nav className="flex flex-wrap items-center justify-center text-base cursor-pointer md:ml-auto">
-						<Link href={"/gtd"} className="mr-5 hover:text-gray-900 ">
-							New
+						{/* TODO: 클릭 및 드롭다운 가능하도록 변경 */}
+						<Link href={"/marketplace"} className="mr-5 hover:text-gray-900">
+							Marketplace
 						</Link>
-						<Link href={"/chat-text"} className="mr-5 hover:text-gray-900">
-							Create
+						<Link href={"/generate"} className="mr-5 hover:text-gray-900 ">
+							Generate
 						</Link>
-						<Link href={"/upload-file"} className="mr-5 hover:text-gray-900">
-							Upload
+						{/* TODO: 클릭 및 드롭다운 가능하도록 변경 dark mode 해당 부분 안에 포함*/}
+						<Link href={"/account"} className="mr-5 hover:text-gray-900">
+							Account
+						</Link>
+						{/* TODO: 아이콘 또는 특별한 표시 추가 해야함 */}
+						<Link href={"/sell"} className="mr-5 hover:text-gray-900">
+							Sell
 						</Link>
 					</nav>
 					{/* button */}
