@@ -19,10 +19,14 @@ export default function G2D() {
 	const onSubmitText = async (search: string) => {
 		try {
 			setIsolating(true);
-			const { data } = await axios.get("/api/call?type=discriminate", {
-				params: { text: search },
-				timeout: 20000,
-			});
+
+			const { data } = await axios.get(
+				"https://startail12-api.cpslab.or.kr/call?type=discriminate",
+				{
+					params: { text: search },
+					timeout: 0,
+				},
+			);
 			console.log(data); //check
 
 			setRecommend(data as RecommendType);
@@ -37,13 +41,13 @@ export default function G2D() {
 		try {
 			setIsolating(true);
 			const resp = await axios.post(
-				"/api/call?type=Diffusion",
+				"https://startail12-api.cpslab.or.kr/call?type=Diffusion",
 				{ text: prompt },
 				{
 					headers: {
 						"content-type": "multipart/form-data",
 					},
-					timeout: 30000,
+					timeout: 0,
 					responseType: "blob",
 				},
 			);
@@ -63,13 +67,17 @@ export default function G2D() {
 		try {
 			const formData = new FormData();
 			file && formData.append("Image", file); //setState 이전 처리한 값 로직 고려시 변경 가능성 있음
-			const resp = await axios.post("/api/call?type=3D", formData, {
-				headers: {
-					"content-type": "multipart/form-data",
+			const resp = await axios.post(
+				"https://startail12-api.cpslab.or.kr/call?type=3D",
+				formData,
+				{
+					headers: {
+						"content-type": "multipart/form-data",
+					},
+					timeout: 0,
+					responseType: "blob",
 				},
-				timeout: 0,
-				responseType: "blob",
-			});
+			);
 			console.log("resp", resp); //check
 
 			// TODO: 파일 확장자 확인 해당 형식으로 받아올 수 있도록
@@ -98,8 +106,14 @@ export default function G2D() {
 		reader.readAsDataURL(newFile);
 	};
 
+	const handleOnKeyPress = (event: any) => {
+		if (event.key === "Enter") {
+			onSubmitText(text); // Enter 입력이 되면 클릭 이벤트 실행
+		}
+	};
+
 	return (
-		<>
+		<div className=" h-[calc(100vh-10em)]">
 			<section className={style["layout-wrapper"]}>
 				{isLoading ? (
 					<div className={style["layout-loading-container"]}>loading...</div>
@@ -159,16 +173,17 @@ export default function G2D() {
 						type="text"
 						className={style["input-container"]}
 						onChange={(e) => setText(e.target.value)}
+						onKeyDown={(e) => handleOnKeyPress(e)}
 						placeholder="send a message..."
 					/>
 					<button
-						className={style["btn-wrapper"]}
+						className="px-4 py-2 ml-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
 						onClick={() => onSubmitText(text)}
 					>
-						{" > "}
+						submit
 					</button>
 				</div>
 			</section>
-		</>
+		</div>
 	);
 }
