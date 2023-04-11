@@ -17,6 +17,7 @@ const nextConfig = {
 			},
 		];
 	},
+	proxyTimeout: 99000,
 };
 
 module.exports = nextConfig;

@@ -5,7 +5,7 @@
 	"scripts": {
 		"dev": "next dev",
 		"build": "next build",
-		"start": "next start",
+		"start": "next start --keepAliveTimeout 160000",
 		"start:local": "next build && next start",
 		"lint": "next lint",
 		"format": "prettier --check --ignore-path .gitignore .",
