@@ -1,5 +1,6 @@
 import dogSrc from "../../../public/dog-1.jpg";
 import Image from "next/image";
+import { PaymentBtn } from "../../component/payments/pym-btn";
 
 export default function AssetId(id: string) {
 	return (
@@ -137,9 +138,11 @@ export default function AssetId(id: string) {
 							<span className="text-2xl font-medium text-gray-900 title-font">
 								$2.59
 							</span>
-							<button className="flex px-6 py-2 ml-auto text-white bg-indigo-500 border-0 rounded focus:outline-none hover:bg-indigo-600">
-								Buy
-							</button>
+							<PaymentBtn>
+								<button className="flex px-6 py-2 ml-auto text-white bg-indigo-500 border-0 rounded focus:outline-none hover:bg-indigo-600">
+									Buy
+								</button>
+							</PaymentBtn>
 							<button className="inline-flex items-center justify-center w-10 h-10 p-0 ml-4 text-gray-500 bg-gray-200 border-0 rounded-full">
 								<svg
 									fill="currentColor"
