@@ -8,15 +8,44 @@ export default function G2D() {
 	const [text, setText] = useState<string>("");
 	const [isLoading, setIsolating] = useState<boolean>();
 	const [recommend, setRecommend] = useState<RecommendType>();
+	const [model, setModel] = useState<string[]>();
+	const [modelName, setModelName] = useState<string>();
 	const [imgPreview, setImgPreview] = useState("");
 	const [imgTemp, setImgTemp] = useState<any>(); // string으로 올거라는 생각
 	const [file, setFile] = useState<File | null>();
+	const [btnType, setBtnType] = useState<"submit" | "modify">("submit");
 
 	useEffect(() => {
 		console.log("useEffect");
+		getModelList();
 	}, []);
 
+	// 모델 리스트 호출
+	const getModelList = async () => {
+		try {
+			const { data } = await axios.get(
+				"https://startail12-api.cpslab.or.kr/call?type=model_list",
+			);
+			setModel(data);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	// 수정 prompt & Img 전송 API
+	const onSubmitModiyGenerate = () => {
+		// TODO: 이미지와 새로운 텍스트를 같이 보냄
+		try {
+			console.log(imgPreview);
+			console.log(text);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	// text to imag 요청
 	const onSubmitText = async (search: string) => {
+		// model 같이 보내기 확인 후
 		try {
 			setIsolating(true);
 
@@ -119,6 +148,28 @@ export default function G2D() {
 					<div className={style["layout-loading-container"]}>loading...</div>
 				) : (
 					<div className={style["layout-content-wrapper"]}>
+						{!modelName && (
+							<div className="flex items-center justify-end gap-3 mt-4 ml-auto">
+								<label className="font-medium ">Chose Model</label>
+								<select
+									className="w-48 p-2 bg-white border border-gray-300 form-select"
+									onChange={(v) => setModelName(v.target.value)}
+								>
+									{!model && (
+										<>
+											<option value={"none"}>none</option>
+											<option value={"test"}>test</option>
+										</>
+									)}
+									{model &&
+										model.map((v, index) => (
+											<option value={v} key={index}>
+												{v}
+											</option>
+										))}
+								</select>
+							</div>
+						)}
 						{/* recommend가 있을 때만 표시 */}
 						{recommend && (
 							<>
@@ -163,26 +214,44 @@ export default function G2D() {
 											/>
 										</div>
 									)}
+									<button
+										className="px-4 py-2 ml-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
+										onClick={() => setBtnType("modify")}
+									>
+										Change Mode Modify
+									</button>
 								</div>
 							</>
 						)}
 					</div>
 				)}
-				<div className={style["input-wrapper"]}>
-					<input
-						type="text"
-						className={style["input-container"]}
-						onChange={(e) => setText(e.target.value)}
-						onKeyDown={(e) => handleOnKeyPress(e)}
-						placeholder="send a message..."
-					/>
-					<button
-						className="px-4 py-2 ml-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
-						onClick={() => onSubmitText(text)}
-					>
-						submit
-					</button>
-				</div>
+				{/* model 선택되면 */}
+				{modelName && (
+					<div className={style["input-wrapper"]}>
+						<input
+							type="text"
+							className={style["input-container"]}
+							onChange={(e) => setText(e.target.value)}
+							onKeyDown={(e) => handleOnKeyPress(e)}
+							placeholder="send a message..."
+						/>
+						{btnType !== "submit" ? (
+							<button
+								className="px-4 py-2 ml-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
+								onClick={() => onSubmitText(text)}
+							>
+								submit
+							</button>
+						) : (
+							<button
+								className="px-4 py-2 ml-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
+								onClick={() => onSubmitModiyGenerate()}
+							>
+								Modify
+							</button>
+						)}
+					</div>
+				)}
 			</section>
 		</div>
 	);
