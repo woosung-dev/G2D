@@ -235,7 +235,7 @@ export default function G2D() {
 							onKeyDown={(e) => handleOnKeyPress(e)}
 							placeholder="send a message..."
 						/>
-						{btnType !== "submit" ? (
+						{btnType === "submit" ? (
 							<button
 								className="px-4 py-2 ml-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
 								onClick={() => onSubmitText(text)}
