@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { RecommendType } from "@/type/category.type";
 import fileDownload from "js-file-download";
+import MViewer from "@/component/modelViewer";
 
 export default function G2D() {
 	const [text, setText] = useState<string>("");
@@ -13,6 +14,7 @@ export default function G2D() {
 	const [imgPreview, setImgPreview] = useState("");
 	const [imgTemp, setImgTemp] = useState<any>(); // string으로 올거라는 생각
 	const [file, setFile] = useState<File | null>();
+	const [file3D, setFile3D] = useState<File | null>();
 	const [btnType, setBtnType] = useState<"submit" | "modify">("submit");
 
 	useEffect(() => {
@@ -33,13 +35,33 @@ export default function G2D() {
 	};
 
 	// 수정 prompt & Img 전송 API
-	const onSubmitModiyGenerate = () => {
-		// TODO: 이미지와 새로운 텍스트를 같이 보냄
+	const onSubmitModifyGenerate = async () => {
 		try {
-			console.log(imgPreview);
-			console.log(text);
-		} catch (error) {
+			setIsolating(true);
+			const formData = new FormData();
+			file && formData.append("Image", file); //setState 이전 처리한 값 로직 고려시 변경 가능성 있음
+			formData.append("text", text);
+			const resp = await axios.post(
+				"https://startail12-api.cpslab.or.kr/call?type=Modify",
+				formData,
+				{
+					headers: {
+						"content-type": "multipart/form-data",
+					},
+					timeout: 0,
+					responseType: "blob",
+				},
+			);
+			console.log(resp); //check
+
+			// 파일 url변환 하여 imag표시를 위한 작업
+			setImgTemp(resp.data);
+			viewFile2D(resp);
+		} catch (error: any) {
 			console.log(error);
+		} finally {
+			setBtnType("submit");
+			setTimeout(() => setIsolating(false), 2000);
 		}
 	};
 
@@ -66,6 +88,7 @@ export default function G2D() {
 		}
 	};
 
+	// 2D image 가져오는 함수
 	const onSubmitPrompt = async (prompt: string) => {
 		try {
 			setIsolating(true);
@@ -83,8 +106,8 @@ export default function G2D() {
 			console.log(resp); //check
 
 			// 파일 url변환 하여 imag표시를 위한 작업
-			setImgTemp(resp.data);
-			viewFile(resp);
+			// setImgTemp(resp.data);
+			viewFile2D(resp);
 		} catch (error: any) {
 			console.log(error);
 		} finally {
@@ -92,8 +115,10 @@ export default function G2D() {
 		}
 	};
 
+	// 3D image 가져오는 함수
 	const onSubmit3D = async () => {
 		try {
+			setIsolating(true);
 			const formData = new FormData();
 			file && formData.append("Image", file); //setState 이전 처리한 값 로직 고려시 변경 가능성 있음
 			const resp = await axios.post(
@@ -110,21 +135,23 @@ export default function G2D() {
 			console.log("resp", resp); //check
 
 			// TODO: 파일 확장자 확인 해당 형식으로 받아올 수 있도록
+			setFile3D(new File([resp.data], "3D_IMAGE"));
+			setImgTemp(resp.data);
 			fileDownload(resp.data, "3D-object-file.ply");
 		} catch (error: any) {
 			console.log(error);
+		} finally {
+			setIsolating(false);
 		}
 	};
 
 	// 파일 date 이미지에 표시하기 위한 설정 로직
-	const viewFile = (resp: any) => {
+	const viewFile2D = (resp: any) => {
 		// TODO: 정확한 동작 확인 필요
-		const result = "result";
+		const result = "2D_IMAGE";
 		const newFile = new File([resp.data], result);
 
-		// TODO: file객체 저장 이후 3D를 만들기 위한 1차 처리 확인 필요함
 		setFile(newFile);
-		console.log(newFile);
 		const reader = new FileReader();
 		reader.onload = (event) => {
 			const previewImage = String(event.target?.result);
@@ -197,22 +224,19 @@ export default function G2D() {
 									</div>
 								</div>
 								<div className={style["content-img-wrapper"]}>
-									{imgPreview && (
-										<div onClick={() => onSubmit3D()}>
-											{/* 2번 안될경우 */}
-											{/* <img
-												src={imgTemp}
-												alt="img-preview"
-												width={600}
-												height={600}
-											/> */}
-											<img
-												src={imgPreview}
-												alt="img-preview"
-												width={600}
-												height={600}
-											/>
-										</div>
+									{imgTemp ? (
+										<MViewer src={imgTemp} />
+									) : (
+										imgPreview && (
+											<div onClick={() => onSubmit3D()}>
+												<img
+													src={imgPreview}
+													alt="img-preview"
+													width={600}
+													height={600}
+												/>
+											</div>
+										)
 									)}
 									<button
 										className="px-4 py-2 ml-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
@@ -245,7 +269,7 @@ export default function G2D() {
 						) : (
 							<button
 								className="px-4 py-2 ml-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
-								onClick={() => onSubmitModiyGenerate()}
+								onClick={() => onSubmitModifyGenerate()}
 							>
 								Modify
 							</button>

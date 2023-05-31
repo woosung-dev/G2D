@@ -8,6 +8,7 @@ type Props = {
 	successUrl?: string;
 	failureUrl?: string;
 	children?: React.ReactNode;
+	amount?: number;
 };
 export const PaymentBtn = (props: Props) => {
 	const handleClick = async () => {
@@ -17,7 +18,7 @@ export const PaymentBtn = (props: Props) => {
 		);
 
 		await tossPayments.requestPayment("카드", {
-			amount: 5000,
+			amount: props.amount ?? 5000,
 			orderId: props.orderId ?? Math.random().toString(36).slice(2),
 			orderName: props.orderName ?? "맥북",
 			successUrl: props.successUrl ?? `${window.location.origin}/api/payments`,
