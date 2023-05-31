@@ -2,8 +2,9 @@ import Layout from "@/component/layout";
 import { ThemeProvider } from "next-themes";
 import "@/styles/globals.scss";
 import type { AppProps } from "next/app";
+import wrapper from "../store";
 
-export default function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps }: AppProps) {
 	return (
 		<ThemeProvider attribute="class">
 			<Layout>
@@ -12,3 +13,5 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 		</ThemeProvider>
 	);
 }
+
+export default wrapper.withRedux(MyApp);
