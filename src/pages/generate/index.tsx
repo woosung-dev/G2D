@@ -16,6 +16,7 @@ export default function G2D() {
 	const [file, setFile] = useState<File | null>();
 	const [file3D, setFile3D] = useState<File | null>();
 	const [btnType, setBtnType] = useState<"submit" | "modify">("submit");
+	const [isViewModifyBtn, setIsViewModifyBtn] = useState<boolean>(false);
 
 	useEffect(() => {
 		console.log("useEffect");
@@ -25,12 +26,15 @@ export default function G2D() {
 	// 모델 리스트 호출
 	const getModelList = async () => {
 		try {
+			setIsolating(true);
 			const { data } = await axios.get(
 				"https://startail12-api.cpslab.or.kr/call?type=model_list",
 			);
 			setModel(data);
 		} catch (error) {
 			console.log(error);
+		} finally {
+			setIsolating(false);
 		}
 	};
 
@@ -108,6 +112,7 @@ export default function G2D() {
 			// 파일 url변환 하여 imag표시를 위한 작업
 			// setImgTemp(resp.data);
 			viewFile2D(resp);
+			setIsViewModifyBtn(true);
 		} catch (error: any) {
 			console.log(error);
 		} finally {
@@ -141,6 +146,7 @@ export default function G2D() {
 		} catch (error: any) {
 			console.log(error);
 		} finally {
+			setIsViewModifyBtn(false);
 			setIsolating(false);
 		}
 	};
@@ -223,7 +229,7 @@ export default function G2D() {
 										})}
 									</div>
 								</div>
-								<div className={style["content-img-wrapper"]}>
+								<div className="flex flex-col flex-auto">
 									{imgTemp ? (
 										<MViewer src={imgTemp} />
 									) : (
@@ -238,12 +244,14 @@ export default function G2D() {
 											</div>
 										)
 									)}
-									<button
-										className="px-4 py-2 ml-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
-										onClick={() => setBtnType("modify")}
-									>
-										Change Mode Modify
-									</button>
+									{isViewModifyBtn && (
+										<button
+											className="px-4 py-2 ml-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
+											onClick={() => setBtnType("modify")}
+										>
+											Change Mode Modify
+										</button>
+									)}
 								</div>
 							</>
 						)}

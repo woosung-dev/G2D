@@ -18,14 +18,6 @@ function MarketPlace(props: Props) {
 			<div className="flex flex-col">
 				{/* Filter */}
 				<h2 className="mb-2 text-lg font-bold border-b border-sky-500">
-					Sort by
-				</h2>
-				{["Hottest", "Top", "Newest"].map((sb, key) => (
-					<span className={`cursor-pointer hover:text-sky-500`} key={key}>
-						{sb}
-					</span>
-				))}
-				<h2 className="mb-2 text-lg font-bold border-b border-sky-500">
 					Model
 				</h2>
 				{[
