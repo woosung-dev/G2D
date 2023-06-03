@@ -6,6 +6,7 @@ import fileDownload from "js-file-download";
 import MViewer from "@/component/modelViewer";
 import useUser from "@/hooks/useUser";
 import { useRouter } from "next/router";
+import Model from "react-3dmodelx";
 
 export default function G2D() {
 	const [text, setText] = useState<string>("");
@@ -14,6 +15,8 @@ export default function G2D() {
 	const [model, setModel] = useState<string[]>();
 	const [modelName, setModelName] = useState<string>("");
 	const [imgPreview, setImgPreview] = useState("");
+	const [img2D, setImg2D] = useState("");
+	const [img3D, setImg3D] = useState("");
 	const [imgTemp, setImgTemp] = useState<any>(); // string으로 올거라는 생각
 	const [file, setFile] = useState<File | null>();
 	const [file3D, setFile3D] = useState<File | null>();
@@ -40,40 +43,6 @@ export default function G2D() {
 			console.log(error);
 		} finally {
 			setIsolating(false);
-		}
-	};
-
-	// 수정 prompt & Img 전송 API
-	const onSubmitModifyGenerate = async () => {
-		try {
-			setIsolating(true);
-			const formData = new FormData();
-			file && formData.append("Image", file); //setState 이전 처리한 값 로직 고려시 변경 가능성 있음
-			formData.append("text", text);
-			formData.append("model_name", modelName);
-			formData.append("ID", userData.email ?? "woosung@gmail.com");
-			const resp = await axios.post(
-				"https://startail12-api.cpslab.or.kr/call?type=Modify",
-				formData,
-				{
-					headers: {
-						"content-type": "multipart/form-data",
-					},
-					timeout: 0,
-					responseType: "blob",
-				},
-			);
-			console.log(resp); //check
-
-			// 파일 url변환 하여 imag표시를 위한 작업
-			setImgTemp(resp.data);
-			viewFile2D(resp);
-		} catch (error: any) {
-			console.log(error);
-		} finally {
-			setBtnType("submit");
-			setIsSaveBtn(false);
-			setTimeout(() => setIsolating(false), 2000);
 		}
 	};
 
@@ -111,6 +80,46 @@ export default function G2D() {
 			const resp = await axios.post(
 				"https://startail12-api.cpslab.or.kr/call?type=Diffusion",
 				formData,
+			);
+			console.log(resp); //check
+
+			// 파일 url변환 하여 imag표시를 위한 작업
+			// setImgTemp(resp.data);
+			// viewFile2D(resp);
+			setImg2D(resp.data);
+			setIsViewModifyBtn(true);
+		} catch (error: any) {
+			console.log(error);
+		} finally {
+			setIsSaveBtn(false);
+			setTimeout(() => setIsolating(false), 2000);
+		}
+	};
+
+	// 수정 prompt & Img 전송 API
+	const onSubmitModifyGenerate = async () => {
+		try {
+			setIsolating(true);
+			const formData = new FormData();
+			formData.append("text", text);
+			formData.append("model_name", modelName);
+			formData.append("ID", userData.email ?? "woosung@gmail.com");
+			const { data } = await axios.get(
+				`https://startail12-api.cpslab.or.kr/static/${img2D}`,
+				{
+					headers: {
+						"content-type": "multipart/form-data",
+					},
+					timeout: 0,
+					responseType: "blob",
+				},
+			);
+			setFile(data);
+			formData.append("Image", data); //setState 이전 처리한 값 로직 고려시 변경 가능성 있음
+
+			const resp = await axios.post(
+				"https://startail12-api.cpslab.or.kr/call?type=Modify",
+				formData,
 				{
 					headers: {
 						"content-type": "multipart/form-data",
@@ -122,14 +131,54 @@ export default function G2D() {
 			console.log(resp); //check
 
 			// 파일 url변환 하여 imag표시를 위한 작업
-			// setImgTemp(resp.data);
+			setImgTemp(resp.data);
 			viewFile2D(resp);
-			setIsViewModifyBtn(true);
 		} catch (error: any) {
 			console.log(error);
 		} finally {
+			setBtnType("submit");
 			setIsSaveBtn(false);
 			setTimeout(() => setIsolating(false), 2000);
+		}
+	};
+
+	// 3D image 가져오는 함수
+	const onSubmit3D = async () => {
+		try {
+			setIsolating(true);
+			const formData = new FormData();
+			formData.append("model_name", modelName);
+			formData.append("ID", userData.email ?? "woosung@gmail.com");
+			const { data } = await axios.get(
+				`https://startail12-api.cpslab.or.kr/static/${img2D}`,
+				{
+					headers: {
+						"content-type": "multipart/form-data",
+					},
+					timeout: 0,
+					responseType: "blob",
+				},
+			);
+			setFile(data);
+
+			formData.append("Image", data); //setState 이전 처리한 값 로직 고려시 변경 가능성 있음
+			const resp = await axios.post(
+				"https://startail12-api.cpslab.or.kr/call?type=3D",
+				formData,
+			);
+			console.log("resp", resp); //check
+
+			// TODO: 파일 확장자 확인 해당 형식으로 받아올 수 있도록
+			// setFile3D(new File([resp.data], "3D_IMAGE"));
+			// setImgTemp(resp.data);
+			// fileDownload(resp.data, "3D-object-file.ply");
+			setIsSaveBtn(true);
+			setImg3D(resp.data);
+		} catch (error: any) {
+			console.log(error);
+		} finally {
+			setIsViewModifyBtn(false);
+			setIsolating(false);
 		}
 	};
 
@@ -147,40 +196,6 @@ export default function G2D() {
 			router.push("/");
 		} catch (error: any) {
 			console.log(error);
-		}
-	};
-
-	// 3D image 가져오는 함수
-	const onSubmit3D = async () => {
-		try {
-			setIsolating(true);
-			const formData = new FormData();
-			formData.append("model_name", modelName);
-			formData.append("ID", userData.email ?? "woosung@gmail.com");
-			file && formData.append("Image", file); //setState 이전 처리한 값 로직 고려시 변경 가능성 있음
-			const resp = await axios.post(
-				"https://startail12-api.cpslab.or.kr/call?type=3D",
-				formData,
-				{
-					headers: {
-						"content-type": "multipart/form-data",
-					},
-					timeout: 0,
-					responseType: "blob",
-				},
-			);
-			console.log("resp", resp); //check
-
-			// TODO: 파일 확장자 확인 해당 형식으로 받아올 수 있도록
-			setFile3D(new File([resp.data], "3D_IMAGE"));
-			setImgTemp(resp.data);
-			fileDownload(resp.data, "3D-object-file.ply");
-			setIsSaveBtn(true);
-		} catch (error: any) {
-			console.log(error);
-		} finally {
-			setIsViewModifyBtn(false);
-			setIsolating(false);
 		}
 	};
 
@@ -208,7 +223,7 @@ export default function G2D() {
 	};
 
 	return (
-		<div className=" h-[calc(100vh-10em)]">
+		<div className="h-[calc(100vh-10em)] container px-5 py-24 mx-auto">
 			<section className={style["layout-wrapper"]}>
 				{isLoading ? (
 					<div className={style["layout-loading-container"]}>loading...</div>
@@ -266,18 +281,25 @@ export default function G2D() {
 									</div>
 								</div>
 								<div className="flex flex-col flex-auto">
-									{imgTemp ? (
-										<MViewer src={imgTemp} />
+									{img3D ? (
+										<>
+											<Model.PLY
+												src={`https://startail12-api.cpslab.or.kr/static/${img3D}`}
+												backgroundColor="gray"
+											/>
+										</>
 									) : (
-										imgPreview && (
-											<div onClick={() => onSubmit3D()}>
-												<img
-													src={imgPreview}
-													alt="img-preview"
-													width={600}
-													height={600}
-												/>
-											</div>
+										img2D && (
+											<>
+												<div onClick={() => onSubmit3D()}>
+													<img
+														src={`https://startail12-api.cpslab.or.kr/static/${img2D}`}
+														alt="img-preview"
+														width={600}
+														height={600}
+													/>
+												</div>
+											</>
 										)
 									)}
 									{isViewModifyBtn && (
@@ -306,7 +328,7 @@ export default function G2D() {
 					<div className={style["input-wrapper"]}>
 						<input
 							type="text"
-							className={style["input-container"]}
+							className="flex p-2 bg-white border rounded-3xl focus:border-gray-200"
 							onChange={(e) => setText(e.target.value)}
 							onKeyDown={(e) => handleOnKeyPress(e)}
 							placeholder="send a message..."

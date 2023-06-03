@@ -2,6 +2,8 @@
 import useUser from "@/hooks/useUser";
 import { fetcherWithToken } from "@/util/request";
 import * as React from "react";
+import Modal from "@/component/modal";
+import SellForm from "@/component/form/sellForm";
 
 const Index = () => {
 	const { isLoggedIn, userData } = useUser();
@@ -19,6 +21,9 @@ const Index = () => {
 	return (
 		<div>
 			<button onClick={() => onSubmit()}>bt</button>
+			<Modal isOpen={true} onClose={() => console.log("closed")}>
+				<SellForm />
+			</Modal>
 		</div>
 	);
 };
