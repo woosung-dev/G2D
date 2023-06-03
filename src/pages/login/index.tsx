@@ -1,13 +1,23 @@
+import axios from "axios";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 export default function Login() {
 	const [email, setEmail] = useState<string>();
 	const [password, setPassword] = useState<string>();
+	const route = useRouter();
 
 	const onLogin = () => {
 		try {
-			//
+			axios.post("https://startail12-api.cpslab.or.kr/call?type=login", {
+				params: {
+					ID: email,
+					password: password,
+				},
+			});
+
+			route.push("/");
 		} catch (error) {
 			console.log(error);
 		}

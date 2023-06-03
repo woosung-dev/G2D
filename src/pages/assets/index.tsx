@@ -2,16 +2,19 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
+
+type AssetsFilter = {
+	categories?: string;
+	model?: string;
+};
+
 type Props = {
 	sort_by: string;
 	modal?: string;
 	categories?: string;
 };
 function MarketPlace(props: Props) {
-	const [model, setModel] = useState<string>(props.modal ?? "all");
-	const [categories, setCategories] = useState<string>(
-		props.categories ?? "all",
-	);
+	const [filtered, setFiltered] = useState<AssetsFilter>({});
 
 	return (
 		<div className="flex m-4">
@@ -27,8 +30,13 @@ function MarketPlace(props: Props) {
 					"GPT",
 					"PromptBase",
 					"Stable Diffusion",
+					// 모델 입력 받은것 집어 넣기
 				].map((mb, key) => (
-					<span key={key} className={`cursor-pointer hover:text-sky-500`}>
+					<span
+						key={key}
+						className={`cursor-pointer hover:text-sky-500`}
+						onClick={() => setFiltered({ model: mb })}
+					>
 						{mb}
 					</span>
 				))}
@@ -46,18 +54,24 @@ function MarketPlace(props: Props) {
 					"Building",
 					"Business",
 					"Cartoon",
+					// 정해진 category
 				].map((cg, key) => (
-					<span key={key} className={`cursor-pointer hover:text-sky-500`}>
+					<span
+						key={key}
+						className={`cursor-pointer hover:text-sky-500`}
+						onClick={() => setFiltered({ categories: cg })}
+					>
 						{cg}
 					</span>
 				))}
 			</div>
 			<div className="w-full mx-5">
 				<ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6">
+					{/* filter 결과 반환 */}
 					{[1, 2, 3, 4, 5, 6, 7, 7, 8, 9, 9, 6, 5, 4, 3, 3, 2, 1].map(
 						(t, i) => (
 							<div key={i}>
-								<Link href={`/posts/${"path"}`}>
+								<Link href={`/assets/${"123"}`}>
 									<article className="overflow-hidden rounded-md shadow-md hover:shadow-xl">
 										<Image
 											className="w-full"

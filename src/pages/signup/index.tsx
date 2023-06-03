@@ -1,4 +1,6 @@
+import axios from "axios";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 const SignUp = () => {
@@ -7,11 +9,19 @@ const SignUp = () => {
 	const [confirm, setConfirm] = useState<string>();
 	const [checkSame, setCheckSame] = useState<boolean>();
 	const [errorMessage, setErrorMessage] = useState<string>();
+	const route = useRouter();
 
 	const onSingup = () => {
 		try {
 			setErrorMessage("");
-			// TODO: 회원가입
+			axios.post("https://startail12-api.cpslab.or.kr/call?type=Register", {
+				params: {
+					ID: email,
+					password: password,
+				},
+			});
+
+			route.push("/login");
 		} catch (error) {
 			setErrorMessage("");
 		}

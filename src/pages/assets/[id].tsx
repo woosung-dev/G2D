@@ -1,17 +1,57 @@
 import dogSrc from "../../../public/dog-1.jpg";
 import Image from "next/image";
 import { PaymentBtn } from "../../component/payments/pym-btn";
+import { useRouter } from "next/router";
+import Model from "react-3dmodelx";
+import OnePointCarousel from "@/component/carousel/onePointCarousel";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-export default function AssetId(id: string) {
+export default function AssetId() {
+	const router = useRouter();
+	const { id } = router.query;
+	console.log(id); // 번호
+	const [assets, setAsset] = useState<any>();
+
+	useEffect(() => {
+		getAssetDetail();
+	}, []);
+
+	const getAssetDetail = async () => {
+		try {
+			//
+			const { data } = await axios.get(
+				`https://startail12-api.cpslab.or.kr/call?type=item_detail&item_id=item${1}`,
+			);
+			console.log(data);
+
+			setAsset(data);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	return (
 		<section className="overflow-hidden text-gray-600 body-font">
 			<div className="container px-5 py-24 mx-auto">
 				<div className="flex flex-wrap mx-auto lg:w-4/5">
-					<Image
-						src={dogSrc}
-						alt="Picture of the dog"
-						className="object-cover object-center w-full h-64 rounded lg:w-1/2 lg:h-auto"
-					/>
+					<div className="w-full mt-6 lg:w-1/2 lg:p-10 lg:py-6 lg:mt-0">
+						<OnePointCarousel>
+							<Image
+								src={"https://startail12-api.cpslab.or.kr/static/item.png"}
+								alt="Picture of the dog"
+								className="object-cover object-center w-full overflow-hidden rounded h-72 lg:w-full lg:h-auto"
+								width={100}
+								height={100}
+							/>
+							<div className="flex justify-center object-cover object-center w-full overflow-hidden rounded h-72 lg:w-full lg:h-auto">
+								<Model.PLY
+									src={"https://startail12-api.cpslab.or.kr/static/item.ply"}
+									backgroundColor="gray"
+								/>
+							</div>
+						</OnePointCarousel>
+					</div>
 					<div className="w-full mt-6 lg:w-1/2 lg:pl-10 lg:py-6 lg:mt-0">
 						<h2 className="text-sm tracking-widest text-gray-500 title-font">
 							Category
@@ -134,27 +174,15 @@ export default function AssetId(id: string) {
 							its own unique physical characteristics and personality traits.
 						</p>
 						<div className="flex items-center pb-5 mt-6 mb-5 border-b-2 border-gray-100"></div>
-						<div className="flex">
+						<div className="flex justify-between">
 							<span className="text-2xl font-medium text-gray-900 title-font">
-								$2.59
+								{(5000).toLocaleString()} ₩
 							</span>
 							<PaymentBtn>
 								<button className="flex px-6 py-2 ml-auto text-white bg-indigo-500 border-0 rounded focus:outline-none hover:bg-indigo-600">
 									Buy
 								</button>
 							</PaymentBtn>
-							<button className="inline-flex items-center justify-center w-10 h-10 p-0 ml-4 text-gray-500 bg-gray-200 border-0 rounded-full">
-								<svg
-									fill="currentColor"
-									strokeLinecap="round"
-									strokeLinejoin="round"
-									strokeWidth="2"
-									className="w-5 h-5"
-									viewBox="0 0 24 24"
-								>
-									<path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
-								</svg>
-							</button>
 						</div>
 					</div>
 				</div>

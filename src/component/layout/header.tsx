@@ -15,7 +15,7 @@ export default function Header() {
 					</Link>
 					<nav className="flex flex-wrap items-center justify-center text-base cursor-pointer md:ml-auto">
 						{/* TODO: 클릭 및 드롭다운 가능하도록 변경 */}
-						<Link href={"/marketplace"} className="mr-5 hover:text-gray-900">
+						<Link href={"/assets"} className="mr-5 hover:text-gray-900">
 							Marketplace
 						</Link>
 						<Link href={"/generate"} className="mr-5 hover:text-gray-900 ">
