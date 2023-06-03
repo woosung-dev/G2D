@@ -328,7 +328,7 @@ export default function G2D() {
 					<div className={style["input-wrapper"]}>
 						<input
 							type="text"
-							className="flex p-2 bg-white border rounded-3xl focus:border-gray-200"
+							className="flex flex-grow p-2 border bg-gray-50 rounded-3xl focus:border-gray-200"
 							onChange={(e) => setText(e.target.value)}
 							onKeyDown={(e) => handleOnKeyPress(e)}
 							placeholder="send a message..."

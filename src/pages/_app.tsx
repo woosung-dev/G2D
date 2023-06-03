@@ -5,21 +5,23 @@ import type { AppProps } from "next/app";
 import wrapper from "../store";
 import { useEffect } from "react";
 import useUser from "@/hooks/useUser";
-import axios from "axios";
+import { fetcherWithToken } from "@/util/request";
+import { getCookie } from "@/util/cookie.util";
 
 function MyApp({ Component, pageProps }: AppProps) {
 	const { isLoggedIn, userData, login } = useUser();
 	useEffect(() => {
 		getToken();
-	});
+	}, []);
 
 	const getToken = async () => {
 		try {
-			if (!isLoggedIn) {
-				const { data } = await axios.get(
-					`https://startail12-api.cpslab.or.kr/token`,
+			if (!isLoggedIn || userData) {
+				const data = await fetcherWithToken(
+					"/token",
+					getCookie("access_token"),
 				);
-				login(data);
+				login({ access_token: getCookie("access_token"), email: data.email });
 			}
 		} catch (error) {
 			console.log(error);

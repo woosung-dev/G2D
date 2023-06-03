@@ -1,4 +1,5 @@
 import useUser from "@/hooks/useUser";
+import { setCookie } from "@/util/cookie.util";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -21,10 +22,14 @@ export default function Login() {
 			const { data } = await axios.post(
 				"https://startail12-api.cpslab.or.kr/login2",
 				formData,
+				{
+					withCredentials: true,
+				},
 			);
 
 			//login 상태 redux에 저장 이후 메인 페이지 이동
 			login(data);
+			setCookie("access_token", data.access_token);
 			route.push("/");
 		} catch (error) {
 			console.log(error);

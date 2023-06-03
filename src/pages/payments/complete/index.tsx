@@ -1,5 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import Con from "../../../../public/congraturation.png";
+import Image from "next/image";
 
 export default function PaymentsComplete() {
 	const router = useRouter();
@@ -33,25 +35,45 @@ export default function PaymentsComplete() {
 	}, []);
 
 	return (
-		<div>
+		<div className="h-[calc(100vh-8em)] ">
 			{payments && (
-				<>
-					<h1>결제가 완료되었습니다</h1>
+				<section className="container flex items-center justify-center flex-grow w-full h-3/4 min-h-max">
+					<h1 className="mb-4 text-3xl font-medium text-gray-900 title-font sm:text-4xl">
+						결제가 완료되었습니다
+					</h1>
+					<Image
+						src={Con}
+						alt={"cong"}
+						width={200}
+						height={200}
+						className="ml-6 mr-10"
+					/>
 					<ul>
-						<li>결제 상품 {payments.orderName}</li>
-						<li>주문번호 {payments.orderId} </li>
-						<li>카드회사 {card.company}</li>
-						<li>카드번호 {card.number}</li>
-						<li>결제금액 {card.amount}</li>
-						<li>
+						<li className="mb-8 leading-relaxed">
+							결제 상품 {payments.orderName}
+						</li>
+						<li className="mb-8 leading-relaxed">
+							주문번호 {payments.orderId}{" "}
+						</li>
+						<li className="mb-8 leading-relaxed">카드회사 {card.company}</li>
+						<li className="mb-8 leading-relaxed">카드번호 {card.number}</li>
+						<li className="mb-8 leading-relaxed">결제금액 {card.amount}</li>
+						<li className="mb-8 leading-relaxed">
 							결제승인날짜{" "}
 							{Intl.DateTimeFormat().format(
 								new Date(payments.approvedAt ?? Date.now()),
 							)}
 						</li>
 					</ul>
-				</>
+				</section>
 			)}
+			<div className="flex items-center justify-center h-1/4">
+				<div className="flex items-center justify-center my-10">
+					<button className="btn-project" onClick={() => router.push("/")}>
+						Go Home
+					</button>
+				</div>
+			</div>
 		</div>
 	);
 }

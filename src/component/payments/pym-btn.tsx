@@ -10,7 +10,14 @@ type Props = {
 	children?: React.ReactNode;
 	amount?: number;
 };
-export const PaymentBtn = (props: Props) => {
+export const PaymentBtn = ({
+	orderId,
+	orderName,
+	successUrl,
+	failureUrl,
+	children,
+	amount,
+}: Props) => {
 	const handleClick = async () => {
 		const tossPayments = await loadTossPayments(
 			process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY ??
@@ -18,17 +25,16 @@ export const PaymentBtn = (props: Props) => {
 		);
 
 		await tossPayments.requestPayment("카드", {
-			amount: props.amount ?? 5000,
-			orderId: props.orderId ?? Math.random().toString(36).slice(2),
-			orderName: props.orderName ?? "맥북",
-			successUrl: props.successUrl ?? `${window.location.origin}/api/payments`,
-			failUrl:
-				props.failureUrl ?? `${window.location.origin}/api/payments/fail`,
+			amount: amount ?? 5000,
+			orderId: orderId ?? Math.random().toString(36).slice(2),
+			orderName: orderName ?? "3D Object",
+			successUrl: successUrl ?? `${window.location.origin}/api/payments`,
+			failUrl: failureUrl ?? `${window.location.origin}/api/payments/fail`,
 		});
 	};
 	return (
 		<div>
-			<div onClick={handleClick}>{props.children}</div>
+			<div onClick={handleClick}>{children}</div>
 		</div>
 	);
 };
