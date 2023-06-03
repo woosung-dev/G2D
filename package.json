@@ -25,6 +25,7 @@
 		"next-themes": "^0.2.1",
 		"react": "18.2.0",
 		"react-3dmodelx": "^1.0.4",
+		"react-cookie": "^4.1.1",
 		"react-dom": "18.2.0",
 		"react-lottie-player": "^1.5.4",
 		"react-multi-carousel": "^2.8.3",

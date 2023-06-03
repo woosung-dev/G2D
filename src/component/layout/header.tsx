@@ -35,10 +35,6 @@ export default function Header() {
 								My page
 							</Link>
 						)}
-						{/* TODO: 아이콘 또는 특별한 표시 추가 해야함 */}
-						<Link href={"/test1"} className="mr-5 hover:text-gray-900">
-							Sell
-						</Link>
 					</nav>
 					{/* button */}
 					<DarkModeToggleButton />

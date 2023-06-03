@@ -1,16 +1,21 @@
 import axios from "axios";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
-const SellForm = () => {
-	const [item_id, setItem_id] = useState<string>();
+type Props = {
+	itemId: string;
+	onSubmit?: () => void;
+};
+const SellForm = ({ itemId, onSubmit }: Props) => {
 	const [category, setCategory] = useState<string>();
 	const [price, setPrice] = useState<string>();
 	const [description, setDescription] = useState<string>();
 	const [title, seTitle] = useState<string>();
+	const router = useRouter();
 
 	const onSellItem = async () => {
 		try {
 			const formData = new FormData();
-			formData.append("item_id", item_id ?? "");
+			formData.append("item_id", itemId ?? "");
 			formData.append("category", category ?? "");
 			formData.append("price", price ?? "0");
 			formData.append("description", description ?? "");
@@ -20,6 +25,8 @@ const SellForm = () => {
 				"https://startail12-api.cpslab.or.kr/call?type=Sell",
 				formData,
 			);
+
+			onSubmit && onSubmit();
 		} catch (error) {
 			console.log(error);
 		}
@@ -31,22 +38,6 @@ const SellForm = () => {
 					<h2 className="mb-5 text-lg font-medium text-gray-900 title-font">
 						Sell 3D Model
 					</h2>
-					<div className="relative mb-4">
-						<label
-							htmlFor="item_id"
-							className="text-sm leading-7 text-gray-600"
-						>
-							Item Id
-						</label>
-						<input
-							type="text"
-							id="item_id"
-							name="item_id"
-							className="w-full px-3 py-1 text-base leading-8 text-gray-700 transition-colors duration-200 ease-in-out bg-white border border-gray-300 rounded outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
-							onChange={(e) => setItem_id(e.target.value)}
-							required
-						/>
-					</div>
 					<div className="relative mb-4">
 						<label htmlFor="title" className="text-sm leading-7 text-gray-600">
 							Title
@@ -108,7 +99,7 @@ const SellForm = () => {
 					<button
 						className={`px-8 py-2 text-lg text-white bg-indigo-500 border-0 rounded focus:outline-none hover:bg-indigo-600 mt-6`}
 						onClick={() => onSellItem()}
-						disabled={!item_id || !category || !price || !description || !title}
+						disabled={!category || !price || !description || !title}
 					>
 						Sell Item
 					</button>

@@ -11,11 +11,10 @@ const Modal: React.FC<ModalProps> = ({
 	children,
 	onClose,
 }: ModalProps) => {
-	const [isModalOpen, setIsModalOpen] = useState(isOpen);
+	// const [isModalOpen, setIsModalOpen] = useState(isOpen);
 	const modalRef = useRef<HTMLDivElement>(null);
 
 	const closeModal = () => {
-		setIsModalOpen(false);
 		onClose();
 	};
 
@@ -26,7 +25,7 @@ const Modal: React.FC<ModalProps> = ({
 	};
 
 	useEffect(() => {
-		if (isModalOpen) {
+		if (isOpen) {
 			document.addEventListener("mousedown", handleClickOutside);
 		} else {
 			document.removeEventListener("mousedown", handleClickOutside);
@@ -35,11 +34,11 @@ const Modal: React.FC<ModalProps> = ({
 		return () => {
 			document.removeEventListener("mousedown", handleClickOutside);
 		};
-	}, [isModalOpen]);
+	}, [isOpen]);
 
 	return (
 		<>
-			{isModalOpen && (
+			{isOpen && (
 				<div className="fixed inset-0 z-50 flex items-center justify-center">
 					<div className="absolute inset-0 bg-black opacity-50"></div>
 					<div ref={modalRef} className="relative p-4 bg-white">

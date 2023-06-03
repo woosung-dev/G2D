@@ -11,11 +11,11 @@ export default function Footer() {
 							className="flex items-center justify-center font-medium text-gray-900 title-font md:justify-start"
 						>
 							<img src="/favicon.ico" alt="test-image" width={25} height={25} />
-							<span className="ml-3 text-xl">G2D</span>
+							<span className="ml-3 text-xl">Free3D</span>
 						</Link>
 
 						<p className="mt-4 text-sm text-gray-500 sm:ml-6 sm:mt-0">
-							© 2023 G2D GLOBAL
+							© 2023 Free3D GLOBAL
 						</p>
 						<span className="inline-flex justify-center mt-4 sm:ml-auto sm:mt-0 sm:justify-start">
 							<a className="text-gray-500">
