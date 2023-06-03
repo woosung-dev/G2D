@@ -5,6 +5,7 @@ import { RecommendType } from "@/type/category.type";
 import fileDownload from "js-file-download";
 import MViewer from "@/component/modelViewer";
 import useUser from "@/hooks/useUser";
+import { useRouter } from "next/router";
 
 export default function G2D() {
 	const [text, setText] = useState<string>("");
@@ -18,7 +19,9 @@ export default function G2D() {
 	const [file3D, setFile3D] = useState<File | null>();
 	const [btnType, setBtnType] = useState<"submit" | "modify">("submit");
 	const [isViewModifyBtn, setIsViewModifyBtn] = useState<boolean>(false);
+	const [isSaveBtn, setIsSaveBtn] = useState<boolean>(false);
 	const { isLoggedIn, userData } = useUser();
+	const router = useRouter();
 
 	useEffect(() => {
 		console.log("useEffect");
@@ -69,6 +72,7 @@ export default function G2D() {
 			console.log(error);
 		} finally {
 			setBtnType("submit");
+			setIsSaveBtn(false);
 			setTimeout(() => setIsolating(false), 2000);
 		}
 	};
@@ -87,11 +91,11 @@ export default function G2D() {
 				},
 			);
 			console.log(data); //check
-
 			setRecommend(data as RecommendType);
 		} catch (error: any) {
 			console.log(error);
 		} finally {
+			setIsSaveBtn(false);
 			setTimeout(() => setIsolating(false), 2000);
 		}
 	};
@@ -124,7 +128,25 @@ export default function G2D() {
 		} catch (error: any) {
 			console.log(error);
 		} finally {
+			setIsSaveBtn(false);
 			setTimeout(() => setIsolating(false), 2000);
+		}
+	};
+
+	const onSave = async () => {
+		try {
+			setIsolating(true);
+			const formData = new FormData();
+			formData.append("model_name", modelName);
+			formData.append("ID", userData.email ?? "woosung@gmail.com");
+			const resp = await axios.post(
+				"https://startail12-api.cpslab.or.kr/call?type=Save",
+				formData,
+			);
+
+			router.push("/");
+		} catch (error: any) {
+			console.log(error);
 		}
 	};
 
@@ -153,6 +175,7 @@ export default function G2D() {
 			setFile3D(new File([resp.data], "3D_IMAGE"));
 			setImgTemp(resp.data);
 			fileDownload(resp.data, "3D-object-file.ply");
+			setIsSaveBtn(true);
 		} catch (error: any) {
 			console.log(error);
 		} finally {
@@ -263,6 +286,14 @@ export default function G2D() {
 											onClick={() => setBtnType("modify")}
 										>
 											Change Mode Modify
+										</button>
+									)}
+									{isSaveBtn && (
+										<button
+											className="px-4 py-2 ml-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
+											onClick={() => onSave()}
+										>
+											Save
 										</button>
 									)}
 								</div>
