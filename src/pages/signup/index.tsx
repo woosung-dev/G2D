@@ -14,12 +14,18 @@ const SignUp = () => {
 	const onSingup = () => {
 		try {
 			setErrorMessage("");
-			axios.post("https://startail12-api.cpslab.or.kr/call?type=Register", {
-				params: {
-					ID: email,
-					password: password,
-				},
-			});
+			console.log(email);
+			console.log(password);
+
+			const formData = new FormData();
+			if (email && password) {
+				formData.append("ID", email);
+				formData.append("password", password);
+			}
+			axios.post(
+				"https://startail12-api.cpslab.or.kr/call?type=Register",
+				formData,
+			);
 
 			route.push("/login");
 		} catch (error) {

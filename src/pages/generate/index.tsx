@@ -4,19 +4,24 @@ import axios from "axios";
 import { RecommendType } from "@/type/category.type";
 import fileDownload from "js-file-download";
 import MViewer from "@/component/modelViewer";
+import useUser from "@/hooks/useUser";
+import { useRouter } from "next/router";
 
 export default function G2D() {
 	const [text, setText] = useState<string>("");
 	const [isLoading, setIsolating] = useState<boolean>();
 	const [recommend, setRecommend] = useState<RecommendType>();
 	const [model, setModel] = useState<string[]>();
-	const [modelName, setModelName] = useState<string>();
+	const [modelName, setModelName] = useState<string>("");
 	const [imgPreview, setImgPreview] = useState("");
 	const [imgTemp, setImgTemp] = useState<any>(); // string으로 올거라는 생각
 	const [file, setFile] = useState<File | null>();
 	const [file3D, setFile3D] = useState<File | null>();
 	const [btnType, setBtnType] = useState<"submit" | "modify">("submit");
 	const [isViewModifyBtn, setIsViewModifyBtn] = useState<boolean>(false);
+	const [isSaveBtn, setIsSaveBtn] = useState<boolean>(false);
+	const { isLoggedIn, userData } = useUser();
+	const router = useRouter();
 
 	useEffect(() => {
 		console.log("useEffect");
@@ -45,6 +50,8 @@ export default function G2D() {
 			const formData = new FormData();
 			file && formData.append("Image", file); //setState 이전 처리한 값 로직 고려시 변경 가능성 있음
 			formData.append("text", text);
+			formData.append("model_name", modelName);
+			formData.append("ID", userData.email ?? "woosung@gmail.com");
 			const resp = await axios.post(
 				"https://startail12-api.cpslab.or.kr/call?type=Modify",
 				formData,
@@ -65,6 +72,7 @@ export default function G2D() {
 			console.log(error);
 		} finally {
 			setBtnType("submit");
+			setIsSaveBtn(false);
 			setTimeout(() => setIsolating(false), 2000);
 		}
 	};
@@ -83,11 +91,11 @@ export default function G2D() {
 				},
 			);
 			console.log(data); //check
-
 			setRecommend(data as RecommendType);
 		} catch (error: any) {
 			console.log(error);
 		} finally {
+			setIsSaveBtn(false);
 			setTimeout(() => setIsolating(false), 2000);
 		}
 	};
@@ -96,9 +104,13 @@ export default function G2D() {
 	const onSubmitPrompt = async (prompt: string) => {
 		try {
 			setIsolating(true);
+			const formData = new FormData();
+			formData.append("text", prompt);
+			formData.append("model_name", modelName);
+			formData.append("ID", userData.email ?? "woosung@gmail.com");
 			const resp = await axios.post(
 				"https://startail12-api.cpslab.or.kr/call?type=Diffusion",
-				{ text: prompt },
+				formData,
 				{
 					headers: {
 						"content-type": "multipart/form-data",
@@ -116,7 +128,25 @@ export default function G2D() {
 		} catch (error: any) {
 			console.log(error);
 		} finally {
+			setIsSaveBtn(false);
 			setTimeout(() => setIsolating(false), 2000);
+		}
+	};
+
+	const onSave = async () => {
+		try {
+			setIsolating(true);
+			const formData = new FormData();
+			formData.append("model_name", modelName);
+			formData.append("ID", userData.email ?? "woosung@gmail.com");
+			const resp = await axios.post(
+				"https://startail12-api.cpslab.or.kr/call?type=Save",
+				formData,
+			);
+
+			router.push("/");
+		} catch (error: any) {
+			console.log(error);
 		}
 	};
 
@@ -125,6 +155,8 @@ export default function G2D() {
 		try {
 			setIsolating(true);
 			const formData = new FormData();
+			formData.append("model_name", modelName);
+			formData.append("ID", userData.email ?? "woosung@gmail.com");
 			file && formData.append("Image", file); //setState 이전 처리한 값 로직 고려시 변경 가능성 있음
 			const resp = await axios.post(
 				"https://startail12-api.cpslab.or.kr/call?type=3D",
@@ -143,6 +175,7 @@ export default function G2D() {
 			setFile3D(new File([resp.data], "3D_IMAGE"));
 			setImgTemp(resp.data);
 			fileDownload(resp.data, "3D-object-file.ply");
+			setIsSaveBtn(true);
 		} catch (error: any) {
 			console.log(error);
 		} finally {
@@ -186,17 +219,20 @@ export default function G2D() {
 								<label className="font-medium ">Chose Model</label>
 								<select
 									className="w-48 p-2 bg-white border border-gray-300 form-select"
-									onChange={(v) => setModelName(v.target.value)}
+									defaultValue={"none"}
+									value={modelName}
+									onChange={(e) => setModelName(e.target.value)}
 								>
-									{!model && (
-										<>
-											<option value={"none"}>none</option>
-											<option value={"test"}>test</option>
-										</>
-									)}
+									<option value="" selected disabled>
+										Choose a model!
+									</option>
 									{model &&
 										model.map((v, index) => (
-											<option value={v} key={index}>
+											<option
+												value={v}
+												key={index}
+												onClick={() => setModelName(v)}
+											>
 												{v}
 											</option>
 										))}
@@ -250,6 +286,14 @@ export default function G2D() {
 											onClick={() => setBtnType("modify")}
 										>
 											Change Mode Modify
+										</button>
+									)}
+									{isSaveBtn && (
+										<button
+											className="px-4 py-2 ml-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
+											onClick={() => onSave()}
+										>
+											Save
 										</button>
 									)}
 								</div>
