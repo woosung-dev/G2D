@@ -3,6 +3,9 @@
 const path = require("path");
 
 const nextConfig = {
+	images: {
+		domains: ['startail12-api.cpslab.or.kr']
+	},
 	reactStrictMode: true,
 	swcMinify: true,
 	sassOptions: {
