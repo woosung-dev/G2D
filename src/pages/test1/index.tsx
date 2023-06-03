@@ -1,12 +1,26 @@
-import Modal from "@/component/modal";
-import MViewer from "@/component/modelViewer";
-import React from "react";
+// @flow
+import useUser from "@/hooks/useUser";
+import { fetcherWithToken } from "@/util/request";
+import * as React from "react";
 
-// 테스트를 위해 만든 page
-// eslint-disable-next-line react/display-name
-export default () => (
-	<>
-		<Modal isOpen={true} onClose={() => false} />
-		<MViewer src={"https://startail12-api.cpslab.or.kr/static/mesh_1b.ply"} />
-	</>
-);
+const Index = () => {
+	const { isLoggedIn, userData } = useUser();
+
+	const onSubmit = () => {
+		try {
+			console.log(userData);
+			if (userData.access_token) {
+				fetcherWithToken("/protected", userData.access_token);
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
+	return (
+		<div>
+			<button onClick={() => onSubmit()}>bt</button>
+		</div>
+	);
+};
+
+export default Index;

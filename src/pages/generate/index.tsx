@@ -4,19 +4,21 @@ import axios from "axios";
 import { RecommendType } from "@/type/category.type";
 import fileDownload from "js-file-download";
 import MViewer from "@/component/modelViewer";
+import useUser from "@/hooks/useUser";
 
 export default function G2D() {
 	const [text, setText] = useState<string>("");
 	const [isLoading, setIsolating] = useState<boolean>();
 	const [recommend, setRecommend] = useState<RecommendType>();
 	const [model, setModel] = useState<string[]>();
-	const [modelName, setModelName] = useState<string>();
+	const [modelName, setModelName] = useState<string>("");
 	const [imgPreview, setImgPreview] = useState("");
 	const [imgTemp, setImgTemp] = useState<any>(); // string으로 올거라는 생각
 	const [file, setFile] = useState<File | null>();
 	const [file3D, setFile3D] = useState<File | null>();
 	const [btnType, setBtnType] = useState<"submit" | "modify">("submit");
 	const [isViewModifyBtn, setIsViewModifyBtn] = useState<boolean>(false);
+	const { isLoggedIn, userData } = useUser();
 
 	useEffect(() => {
 		console.log("useEffect");
@@ -45,6 +47,8 @@ export default function G2D() {
 			const formData = new FormData();
 			file && formData.append("Image", file); //setState 이전 처리한 값 로직 고려시 변경 가능성 있음
 			formData.append("text", text);
+			formData.append("model_name", modelName);
+			formData.append("ID", userData.email ?? "woosung@gmail.com");
 			const resp = await axios.post(
 				"https://startail12-api.cpslab.or.kr/call?type=Modify",
 				formData,
@@ -96,9 +100,13 @@ export default function G2D() {
 	const onSubmitPrompt = async (prompt: string) => {
 		try {
 			setIsolating(true);
+			const formData = new FormData();
+			formData.append("text", prompt);
+			formData.append("model_name", modelName);
+			formData.append("ID", userData.email ?? "woosung@gmail.com");
 			const resp = await axios.post(
 				"https://startail12-api.cpslab.or.kr/call?type=Diffusion",
-				{ text: prompt },
+				formData,
 				{
 					headers: {
 						"content-type": "multipart/form-data",
@@ -125,6 +133,8 @@ export default function G2D() {
 		try {
 			setIsolating(true);
 			const formData = new FormData();
+			formData.append("model_name", modelName);
+			formData.append("ID", userData.email ?? "woosung@gmail.com");
 			file && formData.append("Image", file); //setState 이전 처리한 값 로직 고려시 변경 가능성 있음
 			const resp = await axios.post(
 				"https://startail12-api.cpslab.or.kr/call?type=3D",
@@ -186,17 +196,20 @@ export default function G2D() {
 								<label className="font-medium ">Chose Model</label>
 								<select
 									className="w-48 p-2 bg-white border border-gray-300 form-select"
-									onChange={(v) => setModelName(v.target.value)}
+									defaultValue={"none"}
+									value={modelName}
+									onChange={(e) => setModelName(e.target.value)}
 								>
-									{!model && (
-										<>
-											<option value={"none"}>none</option>
-											<option value={"test"}>test</option>
-										</>
-									)}
+									<option value="" selected disabled>
+										Choose a model!
+									</option>
 									{model &&
 										model.map((v, index) => (
-											<option value={v} key={index}>
+											<option
+												value={v}
+												key={index}
+												onClick={() => setModelName(v)}
+											>
 												{v}
 											</option>
 										))}

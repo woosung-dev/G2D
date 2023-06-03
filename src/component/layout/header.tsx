@@ -1,7 +1,10 @@
 import Link from "next/link";
 import DarkModeToggleButton from "../dark-mode-toggle-button";
+import useUser from "@/hooks/useUser";
 
 export default function Header() {
+	const { isLoggedIn, userData } = useUser();
+
 	return (
 		<>
 			<header className="text-gray-600 body-font">
@@ -23,11 +26,17 @@ export default function Header() {
 						</Link>
 						{/* TODO: 클릭 및 드롭다운 가능하도록 변경 dark mode 해당 부분 안에 포함*/}
 						{/* TODO: login 상태에 따라서 변경 기본 Login 이후 mypage 나 accout */}
-						<Link href={"/login"} className="mr-5 hover:text-gray-900">
-							Login
-						</Link>
+						{!isLoggedIn ? (
+							<Link href={"/login"} className="mr-5 hover:text-gray-900">
+								Login
+							</Link>
+						) : (
+							<Link href={"/mypage"} className="mr-5 hover:text-gray-900">
+								My page
+							</Link>
+						)}
 						{/* TODO: 아이콘 또는 특별한 표시 추가 해야함 */}
-						<Link href={"/sell"} className="mr-5 hover:text-gray-900">
+						<Link href={"/test1"} className="mr-5 hover:text-gray-900">
 							Sell
 						</Link>
 					</nav>

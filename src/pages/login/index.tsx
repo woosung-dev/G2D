@@ -1,3 +1,4 @@
+import useUser from "@/hooks/useUser";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -7,16 +8,23 @@ export default function Login() {
 	const [email, setEmail] = useState<string>();
 	const [password, setPassword] = useState<string>();
 	const route = useRouter();
+	const { login } = useUser();
 
-	const onLogin = () => {
+	const onLogin = async () => {
 		try {
-			axios.post("https://startail12-api.cpslab.or.kr/call?type=login", {
-				params: {
-					ID: email,
-					password: password,
-				},
-			});
+			const formData = new FormData();
+			if (email && password) {
+				formData.append("ID", email);
+				formData.append("password", password);
+			}
 
+			const { data } = await axios.post(
+				"https://startail12-api.cpslab.or.kr/login2",
+				formData,
+			);
+
+			//login 상태 redux에 저장 이후 메인 페이지 이동
+			login(data);
 			route.push("/");
 		} catch (error) {
 			console.log(error);
@@ -39,6 +47,7 @@ export default function Login() {
 							id="email"
 							name="email"
 							className="w-full px-3 py-1 text-base leading-8 text-gray-700 transition-colors duration-200 ease-in-out bg-white border border-gray-300 rounded outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
+							onChange={(e) => setEmail(e.target.value)}
 						/>
 					</div>
 					<div className="relative mb-4">
@@ -50,6 +59,7 @@ export default function Login() {
 							id="password"
 							name="password"
 							className="w-full px-3 py-1 text-base leading-8 text-gray-700 transition-colors duration-200 ease-in-out bg-white border border-gray-300 rounded outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
+							onChange={(e) => setPassword(e.target.value)}
 						/>
 					</div>
 					<button
