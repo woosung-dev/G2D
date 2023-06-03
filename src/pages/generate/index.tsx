@@ -7,6 +7,7 @@ import MViewer from "@/component/modelViewer";
 import useUser from "@/hooks/useUser";
 import { useRouter } from "next/router";
 import Model from "react-3dmodelx";
+import Head from "next/head";
 
 export default function G2D() {
 	const [text, setText] = useState<string>("");
@@ -223,134 +224,141 @@ export default function G2D() {
 	};
 
 	return (
-		<div className="h-[calc(100vh-10em)] container px-5 py-24 mx-auto">
-			<section className={style["layout-wrapper"]}>
-				{isLoading ? (
-					<div className={style["layout-loading-container"]}>loading...</div>
-				) : (
-					<div className={style["layout-content-wrapper"]}>
-						{!modelName && (
-							<div className="flex items-center justify-end gap-3 mt-4 ml-auto">
-								<label className="font-medium ">Chose Model</label>
-								<select
-									className="w-48 p-2 bg-white border border-gray-300 form-select"
-									defaultValue={"none"}
-									value={modelName}
-									onChange={(e) => setModelName(e.target.value)}
-								>
-									<option value="" selected disabled>
-										Choose a model!
-									</option>
-									{model &&
-										model.map((v, index) => (
-											<option
-												value={v}
-												key={index}
-												onClick={() => setModelName(v)}
-											>
-												{v}
-											</option>
-										))}
-								</select>
-							</div>
-						)}
-						{/* recommend가 있을 때만 표시 */}
-						{recommend && (
-							<>
-								<div className={style["content-wrapper"]}>
-									<div className={style["content-category"]}>
-										{/* category 응답 위치 넘어가면 잘림... TODO: 해당 부분 처리 확인 후*/}
-										<span>{recommend.recommend}</span>
-									</div>
-									<div className={style["content-details"]}>
-										{/* detail 응답 위치 map을 돌면서 값 표시 p*/}
-										{Object.entries(recommend.detail).map(([key, value]) => {
-											return (
-												<div key={key}>
-													<button
-														onClick={() => onSubmitPrompt(value.prompt)}
-														className={style["btn"]}
-													>
-														{value.prompt}
-													</button>
-													{": "}
-													<span>{value.detail}</span>
-												</div>
-											);
-										})}
-									</div>
+		<>
+			<Head>
+				<title> Free3D - generate page </title>
+				<meta name="description" content="generate page" />
+				<link rel="icon" href="/favicon.ico" />
+			</Head>
+			<div className="h-[calc(100vh-10em)] container px-5 py-24 mx-auto">
+				<section className={style["layout-wrapper"]}>
+					{isLoading ? (
+						<div className={style["layout-loading-container"]}>loading...</div>
+					) : (
+						<div className={style["layout-content-wrapper"]}>
+							{!modelName && (
+								<div className="flex items-center justify-end gap-3 mt-4 ml-auto">
+									<label className="font-medium ">Chose Model</label>
+									<select
+										className="w-48 p-2 bg-white border border-gray-300 form-select"
+										defaultValue={"none"}
+										value={modelName}
+										onChange={(e) => setModelName(e.target.value)}
+									>
+										<option value="" selected disabled>
+											Choose a model!
+										</option>
+										{model &&
+											model.map((v, index) => (
+												<option
+													value={v}
+													key={index}
+													onClick={() => setModelName(v)}
+												>
+													{v}
+												</option>
+											))}
+									</select>
 								</div>
-								<div className="flex flex-col flex-auto">
-									{img3D ? (
-										<>
-											<Model.PLY
-												src={`https://startail12-api.cpslab.or.kr/static/${img3D}`}
-												backgroundColor="gray"
-											/>
-										</>
-									) : (
-										img2D && (
+							)}
+							{/* recommend가 있을 때만 표시 */}
+							{recommend && (
+								<>
+									<div className={style["content-wrapper"]}>
+										<div className={style["content-category"]}>
+											{/* category 응답 위치 넘어가면 잘림... TODO: 해당 부분 처리 확인 후*/}
+											<span>{recommend.recommend}</span>
+										</div>
+										<div className={style["content-details"]}>
+											{/* detail 응답 위치 map을 돌면서 값 표시 p*/}
+											{Object.entries(recommend.detail).map(([key, value]) => {
+												return (
+													<div key={key}>
+														<button
+															onClick={() => onSubmitPrompt(value.prompt)}
+															className={style["btn"]}
+														>
+															{value.prompt}
+														</button>
+														{": "}
+														<span>{value.detail}</span>
+													</div>
+												);
+											})}
+										</div>
+									</div>
+									<div className="flex flex-col flex-auto">
+										{img3D ? (
 											<>
-												<div onClick={() => onSubmit3D()}>
-													<img
-														src={`https://startail12-api.cpslab.or.kr/static/${img2D}`}
-														alt="img-preview"
-														width={600}
-														height={600}
-													/>
-												</div>
+												<Model.PLY
+													src={`https://startail12-api.cpslab.or.kr/static/${img3D}`}
+													backgroundColor="gray"
+												/>
 											</>
-										)
-									)}
-									{isViewModifyBtn && (
-										<button
-											className="px-4 py-2 ml-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
-											onClick={() => setBtnType("modify")}
-										>
-											Change Mode Modify
-										</button>
-									)}
-									{isSaveBtn && (
-										<button
-											className="px-4 py-2 ml-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
-											onClick={() => onSave()}
-										>
-											Save
-										</button>
-									)}
-								</div>
-							</>
-						)}
-					</div>
-				)}
-				{/* model 선택되면 */}
-				{modelName && (
-					<div className={style["input-wrapper"]}>
-						<input
-							type="text"
-							className="flex flex-grow p-2 border bg-gray-50 rounded-3xl focus:border-gray-200"
-							onChange={(e) => setText(e.target.value)}
-							onKeyDown={(e) => handleOnKeyPress(e)}
-							placeholder="send a message..."
-						/>
-						{btnType === "submit" ? (
-							<button
-								className="px-4 py-2 ml-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
-								onClick={() => onSubmitText(text)}
-							>
-								submit
-							</button>
-						) : (
-							<button
-								className="px-4 py-2 ml-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
-								onClick={() => onSubmitModifyGenerate()}
-							>
-								Modify
-							</button>
-						)}
-					</div>
-				)}
-			</section>
-		</div>
+										) : (
+											img2D && (
+												<>
+													<div onClick={() => onSubmit3D()}>
+														<img
+															src={`https://startail12-api.cpslab.or.kr/static/${img2D}`}
+															alt="img-preview"
+															width={600}
+															height={600}
+														/>
+													</div>
+												</>
+											)
+										)}
+										{isViewModifyBtn && (
+											<button
+												className="px-4 py-2 ml-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
+												onClick={() => setBtnType("modify")}
+											>
+												Change Mode Modify
+											</button>
+										)}
+										{isSaveBtn && (
+											<button
+												className="px-4 py-2 ml-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
+												onClick={() => onSave()}
+											>
+												Save
+											</button>
+										)}
+									</div>
+								</>
+							)}
+						</div>
+					)}
+					{/* model 선택되면 */}
+					{modelName && (
+						<div className={style["input-wrapper"]}>
+							<input
+								type="text"
+								className="flex flex-grow p-2 border bg-gray-50 rounded-3xl focus:border-gray-200"
+								onChange={(e) => setText(e.target.value)}
+								onKeyDown={(e) => handleOnKeyPress(e)}
+								placeholder="send a message..."
+							/>
+							{btnType === "submit" ? (
+								<button
+									className="px-4 py-2 ml-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
+									onClick={() => onSubmitText(text)}
+								>
+									submit
+								</button>
+							) : (
+								<button
+									className="px-4 py-2 ml-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
+									onClick={() => onSubmitModifyGenerate()}
+								>
+									Modify
+								</button>
+							)}
+						</div>
+					)}
+				</section>
+			</div>
+		</>
 	);
 }

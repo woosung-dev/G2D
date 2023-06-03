@@ -6,6 +6,7 @@ import OnePointCarousel from "@/component/carousel/onePointCarousel";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { IPostCard } from "@/component/carousel/PostCard";
+import Head from "next/head";
 
 export default function AssetId() {
 	const router = useRouter();
@@ -39,6 +40,11 @@ export default function AssetId() {
 
 	return (
 		<>
+			<Head>
+				<title> Free3D - assets detail page </title>
+				<meta name="description" content="assets detail page" />
+				<link rel="icon" href="/favicon.ico" />
+			</Head>
 			{isLoading ? (
 				<></>
 			) : (

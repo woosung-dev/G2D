@@ -1,4 +1,5 @@
 import axios from "axios";
+import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -42,6 +43,11 @@ const SignUp = () => {
 	};
 	return (
 		<>
+			<Head>
+				<title> Free3D - signuo </title>
+				<meta name="description" content="signuo page" />
+				<link rel="icon" href="/favicon.ico" />
+			</Head>
 			<section className="h-[calc(100vh-76px)] text-gray-600 body-font">
 				<div className="container flex flex-wrap items-center px-5 py-24 mx-auto">
 					<div className="flex flex-col w-full p-8 mt-10 bg-gray-100 rounded-lg lg:w-2/6 md:w-1/2 md:mx-auto md:mt-0">
