@@ -1,8 +1,8 @@
-import dayjs from "dayjs";
+// import dayjs from "dayjs";
 import Image from "next/image";
 import Link from "next/link";
 
-type Props = { post: any };
+type Props = { post?: any };
 export default function PostCard({
 	post: { title, description, date, category, path },
 }: Props) {
@@ -17,11 +17,11 @@ export default function PostCard({
 					height={150}
 				/>
 				<div className="flex flex-col items-center p-4">
-					<time className="self-end text-gray-700">
+					{/* <time className="self-end text-gray-700">
 						{date
 							? dayjs(date).format("YYYY-MM-DD")
 							: dayjs().format("YYYY-MM-DD")}
-					</time>
+					</time> */}
 					<h3 className="text-lg font-bold">{title ?? "title"}</h3>
 					<p className="w-full text-center truncate">
 						{description ?? "description"}
