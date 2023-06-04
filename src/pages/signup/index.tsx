@@ -1,3 +1,4 @@
+import { errors, success } from "@/util/toastify";
 import axios from "axios";
 import Head from "next/head";
 import Link from "next/link";
@@ -28,17 +29,19 @@ const SignUp = () => {
 				formData,
 			);
 
+			success("signup successful");
 			route.push("/login");
 		} catch (error) {
+			errors();
 			setErrorMessage("");
 		}
 	};
 
 	const onSamePasswordCheck = () => {
 		if (password === confirm) {
-			setCheckSame(true);
-		} else {
 			setCheckSame(false);
+		} else {
+			setCheckSame(true);
 		}
 	};
 	return (

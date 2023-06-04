@@ -1,5 +1,4 @@
 import useUser from "@/hooks/useUser";
-import { request } from "@/util/request";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -16,13 +15,14 @@ const WithAuth = (Component: any) => {
 		useEffect(() => {
 			const getUser = async () => {
 				try {
+					// 전역상태가 로그인이 아닐 때
 					if (!isLoggedIn) {
-						// redux 상태에 따라서 없을 경우
 						// const { data } = await request<any>("GET", "/myinfo");
 						// if (data) setIsAuth(true);
-						setIsAuth(true);
-					} else {
 						setIsAuth(false);
+						router.push("/login");
+					} else {
+						setIsAuth(true);
 					}
 				} catch (error) {
 					console.log("error", error);

@@ -1,3 +1,4 @@
+import { success, errors } from "@/util/toastify";
 import axios from "axios";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
@@ -27,7 +28,9 @@ const SellForm = ({ itemId, onSubmit }: Props) => {
 			);
 
 			onSubmit && onSubmit();
+			success();
 		} catch (error) {
+			errors();
 			console.log(error);
 		}
 	};
