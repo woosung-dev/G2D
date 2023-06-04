@@ -5,10 +5,10 @@ type Props = {
 };
 const MViewer = ({ src }: Props) => (
 	<>
-		{src.slice(src.lastIndexOf(".")) === "ply" && (
+		{src.slice(src.lastIndexOf(".")) === ".ply" && (
 			<Model.PLY src={src} backgroundColor="gray" />
 		)}
-		{src.slice(src.lastIndexOf(".")) === "obj" && (
+		{src.slice(src.lastIndexOf(".")) === ".obj" && (
 			<Model.PLY src={src} backgroundColor="gray" />
 		)}
 	</>
