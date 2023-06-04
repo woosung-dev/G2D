@@ -8,6 +8,8 @@ import Model from "react-3dmodelx";
 import Head from "next/head";
 import WithAuth from "@/component/auth/withAuth";
 import { success } from "@/util/toastify";
+import Image from "next/image";
+import gd from "../../../public/guideline.png";
 
 function G2D() {
 	const [text, setText] = useState<string>("");
@@ -238,30 +240,35 @@ function G2D() {
 					{isLoading ? (
 						<div className={style["layout-loading-container"]}>loading...</div>
 					) : (
-						<div className={style["layout-content-wrapper"]}>
+						<div className="flex justify-center">
 							{!modelName && (
-								<div className="flex items-center justify-end gap-3 mt-4 ml-auto">
-									<label className="font-medium ">Chose Model</label>
-									<select
-										className="w-48 p-2 bg-white border border-gray-300 form-select"
-										defaultValue={"none"}
-										value={modelName}
-										onChange={(e) => setModelName(e.target.value)}
-									>
-										<option value="" selected disabled>
-											Choose a model!
-										</option>
-										{model &&
-											model.map((v, index) => (
-												<option
-													value={v}
-													key={index}
-													onClick={() => setModelName(v)}
-												>
-													{v}
-												</option>
-											))}
-									</select>
+								<div className="flex flex-col">
+									<div className="flex items-center justify-center w-full gap-3 mt-4 ml-auto">
+										<label className="font-medium ">Chose Model</label>
+										<select
+											className="w-48 p-2 bg-white border border-gray-300 form-select"
+											defaultValue={"none"}
+											value={modelName}
+											onChange={(e) => setModelName(e.target.value)}
+										>
+											<option value="" selected disabled>
+												Choose a model!
+											</option>
+											{model &&
+												model.map((v, index) => (
+													<option
+														value={v}
+														key={index}
+														onClick={() => setModelName(v)}
+													>
+														{v}
+													</option>
+												))}
+										</select>
+									</div>
+									<div className="mt-8">
+										<Image src={gd} alt={"가이드 라인"} />
+									</div>
 								</div>
 							)}
 							{/* recommend가 있을 때만 표시 */}
