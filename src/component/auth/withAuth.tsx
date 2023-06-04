@@ -1,4 +1,6 @@
 import useUser from "@/hooks/useUser";
+import { getCookie } from "@/util/cookie.util";
+import { fetcherWithToken, request } from "@/util/request";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -8,7 +10,7 @@ import { useEffect, useState } from "react";
  */
 const WithAuth = (Component: any) => {
 	const AuthenticatedComponent = (props: any) => {
-		const { isLoggedIn, userData } = useUser();
+		const { isLoggedIn, userData, login } = useUser();
 		const [isAuth, setIsAuth] = useState(false);
 		const router = useRouter();
 
@@ -17,10 +19,20 @@ const WithAuth = (Component: any) => {
 				try {
 					// 전역상태가 로그인이 아닐 때
 					if (!isLoggedIn) {
-						// const { data } = await request<any>("GET", "/myinfo");
-						// if (data) setIsAuth(true);
-						setIsAuth(false);
-						router.push("/login");
+						const data = await fetcherWithToken(
+							"/token",
+							getCookie("access_token"),
+						);
+						if (data.email) {
+							login({
+								access_token: getCookie("access_token"),
+								email: data.email,
+							});
+							setIsAuth(true);
+						} else {
+							setIsAuth(false);
+							router.push("/login");
+						}
 					} else {
 						setIsAuth(true);
 					}

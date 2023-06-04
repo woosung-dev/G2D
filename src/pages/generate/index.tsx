@@ -10,6 +10,7 @@ import WithAuth from "@/component/auth/withAuth";
 import { success } from "@/util/toastify";
 import Image from "next/image";
 import gd from "../../../public/guideline.png";
+import MViewer from "@/component/modelViewer";
 
 function G2D() {
 	const [text, setText] = useState<string>("");
@@ -63,6 +64,7 @@ function G2D() {
 		// model 같이 보내기 확인 후
 		try {
 			setIsolating(true);
+			resetState();
 			const formData = new FormData();
 			formData.append("text", search);
 			formData.append("model_name", modelName);
@@ -76,7 +78,6 @@ function G2D() {
 		} catch (error: any) {
 			console.log(error);
 		} finally {
-			resetState();
 			setTimeout(() => setIsolating(false), 2000);
 		}
 	};
@@ -235,14 +236,14 @@ function G2D() {
 				<meta name="description" content="generate page" />
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
-			<div className="h-[calc(100vh-12em)] container px-5 py-24 mx-auto">
+			<div className="h-[calc(100vh-12em)] container px-5 mx-auto">
 				<section className="flex flex-col min-h-full mx-auto my-8">
 					{isLoading ? (
 						<div className={style["layout-loading-container"]}>loading...</div>
 					) : (
 						<div className="flex justify-center">
 							{!modelName && (
-								<div className="flex flex-col">
+								<div className="flex flex-col gap-2">
 									<div className="flex items-center justify-center w-full gap-3 mt-4 ml-auto">
 										<label className="font-medium ">Chose Model</label>
 										<select
@@ -300,20 +301,20 @@ function G2D() {
 									<div className="flex flex-col">
 										{img3D ? (
 											<>
-												<Model.PLY
+												<MViewer
 													src={`https://startail12-api.cpslab.or.kr/static/${img3D}`}
-													backgroundColor="gray"
 												/>
 											</>
 										) : (
 											img2D && (
 												<>
 													<div className="flex flex-col items-center justify-center">
-														<img
+														<Image
 															src={`https://startail12-api.cpslab.or.kr/static/${img2D}`}
 															alt="img-preview"
 															width={600}
 															height={600}
+															unoptimized={true}
 														/>
 														<button
 															className="px-4 py-2 ml-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"

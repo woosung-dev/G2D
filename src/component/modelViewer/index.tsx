@@ -1,13 +1,17 @@
 import React from "react";
 import Model from "react-3dmodelx";
 type Props = {
-	src?: any;
+	src: string;
 };
-// eslint-disable-next-line react/display-name
 const MViewer = ({ src }: Props) => (
-	<div style={{ maxWidth: 800, width: "100%", height: 400, margin: "auto" }}>
-		<Model.PLY src={src ?? "./ch3d.ply"} backgroundColor="gray" />
-	</div>
+	<>
+		{src.slice(src.lastIndexOf(".")) === "ply" && (
+			<Model.PLY src={src} backgroundColor="gray" />
+		)}
+		{src.slice(src.lastIndexOf(".")) === "obj" && (
+			<Model.PLY src={src} backgroundColor="gray" />
+		)}
+	</>
 );
 
 export default MViewer;

@@ -25,6 +25,7 @@ function MarketPlace(props: Props) {
 	const [filtered, setFiltered] = useState<AssetsFilter>({});
 	const [articles, setArticles] = useState<IPostCard[]>([]);
 	const [model, setModel] = useState<string[]>();
+	const [category, setCategory] = useState<string[]>();
 
 	const getArticleList = async () => {
 		try {
@@ -41,10 +42,15 @@ function MarketPlace(props: Props) {
 	// 모델 리스트 호출
 	const getModelList = async () => {
 		try {
-			const { data } = await axios.get(
+			const model = await axios.get(
 				"https://startail12-api.cpslab.or.kr/call?type=model_list",
 			);
-			setModel(data);
+			const category = await axios.get(
+				"https://startail12-api.cpslab.or.kr/call?type=get_category",
+			);
+
+			setCategory(category.data);
+			setModel(model.data);
 		} catch (error) {
 			console.log(error);
 		}
@@ -90,13 +96,7 @@ function MarketPlace(props: Props) {
 					<h2 className="mb-2 text-lg font-bold border-b border-sky-500">
 						Category
 					</h2>
-					{[
-						"3D",
-						"Art",
-						"Furniture",
-						"Cartoon",
-						// 정해진 category
-					].map((cg, key) => (
+					{(category ?? []).map((cg, key) => (
 						<span
 							key={key}
 							className={`cursor-pointer hover:text-sky-500 ${

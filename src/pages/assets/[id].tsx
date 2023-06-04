@@ -8,6 +8,7 @@ import axios from "axios";
 import { IPostCard } from "@/component/carousel/PostCard";
 import Head from "next/head";
 import { errors } from "@/util/toastify";
+import MViewer from "@/component/modelViewer";
 
 export default function AssetId() {
 	const router = useRouter();
@@ -63,9 +64,8 @@ export default function AssetId() {
 										height={100}
 									/>
 									<div className="flex justify-center object-cover object-center w-full overflow-hidden rounded h-72 lg:w-full lg:h-auto">
-										<Model.PLY
+										<MViewer
 											src={`https://startail12-api.cpslab.or.kr/static/${assets?._3d_path}`}
-											backgroundColor="gray"
 										/>
 									</div>
 								</OnePointCarousel>
