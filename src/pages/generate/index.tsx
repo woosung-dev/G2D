@@ -2,14 +2,14 @@ import style from "./gtd.module.scss";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { RecommendType } from "@/type/category.type";
-import fileDownload from "js-file-download";
-import MViewer from "@/component/modelViewer";
 import useUser from "@/hooks/useUser";
 import { useRouter } from "next/router";
 import Model from "react-3dmodelx";
 import Head from "next/head";
+import WithAuth from "@/component/auth/withAuth";
+import { success } from "@/util/toastify";
 
-export default function G2D() {
+function G2D() {
 	const [text, setText] = useState<string>("");
 	const [isLoading, setIsolating] = useState<boolean>();
 	const [recommend, setRecommend] = useState<RecommendType>();
@@ -32,6 +32,14 @@ export default function G2D() {
 		getModelList();
 	}, []);
 
+	const resetState = () => {
+		setIsSaveBtn(false);
+		setIsViewModifyBtn(false);
+		setImg2D("");
+		setImg2D("");
+		setImgPreview("");
+	};
+
 	// 모델 리스트 호출
 	const getModelList = async () => {
 		try {
@@ -44,28 +52,29 @@ export default function G2D() {
 			console.log(error);
 		} finally {
 			setIsolating(false);
+			resetState();
 		}
 	};
 
-	// text to imag 요청
+	// text to img 요청
 	const onSubmitText = async (search: string) => {
 		// model 같이 보내기 확인 후
 		try {
 			setIsolating(true);
-
-			const { data } = await axios.get(
+			const formData = new FormData();
+			formData.append("text", search);
+			formData.append("model_name", modelName);
+			formData.append("ID", userData.email ?? "woosung@gmail.com");
+			const { data } = await axios.post(
 				"https://startail12-api.cpslab.or.kr/call?type=discriminate",
-				{
-					params: { text: search },
-					timeout: 0,
-				},
+				formData,
 			);
 			console.log(data); //check
 			setRecommend(data as RecommendType);
 		} catch (error: any) {
 			console.log(error);
 		} finally {
-			setIsSaveBtn(false);
+			resetState();
 			setTimeout(() => setIsolating(false), 2000);
 		}
 	};
@@ -121,19 +130,12 @@ export default function G2D() {
 			const resp = await axios.post(
 				"https://startail12-api.cpslab.or.kr/call?type=Modify",
 				formData,
-				{
-					headers: {
-						"content-type": "multipart/form-data",
-					},
-					timeout: 0,
-					responseType: "blob",
-				},
 			);
 			console.log(resp); //check
 
 			// 파일 url변환 하여 imag표시를 위한 작업
+			// viewFile2D(resp);
 			setImgTemp(resp.data);
-			viewFile2D(resp);
 		} catch (error: any) {
 			console.log(error);
 		} finally {
@@ -194,6 +196,7 @@ export default function G2D() {
 				formData,
 			);
 
+			success("Save success");
 			router.push("/");
 		} catch (error: any) {
 			console.log(error);
@@ -201,21 +204,21 @@ export default function G2D() {
 	};
 
 	// 파일 date 이미지에 표시하기 위한 설정 로직
-	const viewFile2D = (resp: any) => {
-		// TODO: 정확한 동작 확인 필요
-		const result = "2D_IMAGE";
-		const newFile = new File([resp.data], result);
+	// const viewFile2D = (resp: any) => {
+	// 	// TODO: 정확한 동작 확인 필요
+	// 	const result = "2D_IMAGE";
+	// 	const newFile = new File([resp.data], result);
 
-		setFile(newFile);
-		const reader = new FileReader();
-		reader.onload = (event) => {
-			const previewImage = String(event.target?.result);
-			console.log(previewImage);
+	// 	setFile(newFile);
+	// 	const reader = new FileReader();
+	// 	reader.onload = (event) => {
+	// 		const previewImage = String(event.target?.result);
+	// 		console.log(previewImage);
 
-			setImgPreview(previewImage);
-		};
-		reader.readAsDataURL(newFile);
-	};
+	// 		setImgPreview(previewImage);
+	// 	};
+	// 	reader.readAsDataURL(newFile);
+	// };
 
 	const handleOnKeyPress = (event: any) => {
 		if (event.key === "Enter") {
@@ -230,8 +233,8 @@ export default function G2D() {
 				<meta name="description" content="generate page" />
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
-			<div className="h-[calc(100vh-10em)] container px-5 py-24 mx-auto">
-				<section className={style["layout-wrapper"]}>
+			<div className="h-[calc(100vh-12em)] container px-5 py-24 mx-auto">
+				<section className="flex flex-col min-h-full mx-auto my-8">
 					{isLoading ? (
 						<div className={style["layout-loading-container"]}>loading...</div>
 					) : (
@@ -287,7 +290,7 @@ export default function G2D() {
 											})}
 										</div>
 									</div>
-									<div className="flex flex-col flex-auto">
+									<div className="flex flex-col">
 										{img3D ? (
 											<>
 												<Model.PLY
@@ -298,13 +301,19 @@ export default function G2D() {
 										) : (
 											img2D && (
 												<>
-													<div onClick={() => onSubmit3D()}>
+													<div className="flex flex-col items-center justify-center">
 														<img
 															src={`https://startail12-api.cpslab.or.kr/static/${img2D}`}
 															alt="img-preview"
 															width={600}
 															height={600}
 														/>
+														<button
+															className="px-4 py-2 ml-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
+															onClick={() => onSubmit3D()}
+														>
+															Change 3D
+														</button>
 													</div>
 												</>
 											)
@@ -362,3 +371,5 @@ export default function G2D() {
 		</>
 	);
 }
+
+export default WithAuth(G2D);

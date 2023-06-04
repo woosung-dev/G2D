@@ -1,3 +1,4 @@
+import WithAuth from "@/component/auth/withAuth";
 import PostCard, { IPostCard } from "@/component/carousel/PostCard";
 import SellForm from "@/component/form/sellForm";
 import Modal from "@/component/modal";
@@ -21,7 +22,7 @@ const MyPage = () => {
 		try {
 			const { data } = await axios.get<IPostCard[]>(
 				`https://startail12-api.cpslab.or.kr/call?type=my_list`,
-				{ params: { ID: userData.email ?? "woosung@gmail.com" } },
+				{ params: { ID: userData.email } },
 			);
 
 			setMyList(data);
@@ -31,6 +32,7 @@ const MyPage = () => {
 	};
 
 	const onModalSubmit = () => {
+		setIsModalOpen(false);
 		setIsModalsubmit(!isModalsubmit);
 	};
 
@@ -44,7 +46,7 @@ const MyPage = () => {
 			<div className="container px-5 py-24 mx-auto">
 				<section className="flex flex-col items-center justify-center gray-600 min-fl body-font">
 					<h2 className="mt-2 mb-4 text-6xl font-bold">my page</h2>
-					<HeroProfile email={"wooosung@gmail.ocm"} />
+					<HeroProfile email={userData?.email ?? ""} />
 					<div className="w-full my-14">
 						<h2 className="my-2 text-2xl font-bold">{"Generate List"}</h2>
 						<hr className="py-1" />
@@ -93,4 +95,4 @@ const MyPage = () => {
 	);
 };
 
-export default MyPage;
+export default WithAuth(MyPage);

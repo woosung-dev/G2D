@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { IPostCard } from "@/component/carousel/PostCard";
 import Head from "next/head";
+import { errors } from "@/util/toastify";
 
 export default function AssetId() {
 	const router = useRouter();
@@ -32,6 +33,7 @@ export default function AssetId() {
 			console.log(data);
 			setAsset(data);
 		} catch (error) {
+			errors();
 			console.log(error);
 		} finally {
 			setIsLoading(false);
