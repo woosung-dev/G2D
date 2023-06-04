@@ -38,7 +38,7 @@ export default function PostCard({
 	linkDisable = false,
 }: Props) {
 	const Article = (
-		<article className="overflow-hidden rounded-md shadow-md hover:shadow-xl">
+		<article className="overflow-hidden border border-gray-300 rounded-md shadow-md hover:shadow-lg hover:shadow-xl dark:border-gray-200/50 dark:hover:shadow-gray-400/40">
 			<Image
 				className="w-full"
 				src={`https://startail12-api.cpslab.or.kr/static/${Image_path}`}
@@ -46,6 +46,7 @@ export default function PostCard({
 				width={150}
 				height={150}
 			/>
+			<hr />
 			<div className="flex flex-col items-center p-4">
 				<time className="self-end text-gray-700">
 					{create_time

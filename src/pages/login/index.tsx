@@ -49,9 +49,7 @@ export default function Login() {
 			<section className="h-[calc(100vh-76px)] text-gray-600 body-font">
 				<div className="container flex flex-wrap items-center px-5 py-24 mx-auto">
 					<div className="flex flex-col w-full p-8 mt-10 bg-gray-100 rounded-lg lg:w-2/6 md:w-1/2 md:mx-auto md:mt-0">
-						<h2 className="mb-5 text-lg font-medium text-gray-900 title-font">
-							Login
-						</h2>
+						<span className="mb-5 text-lg font-medium title-font">Login</span>
 						<div className="relative mb-4">
 							<label
 								htmlFor="email"

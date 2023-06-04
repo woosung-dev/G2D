@@ -1,6 +1,7 @@
 import useUser from "@/hooks/useUser";
+import Login from "@/pages/login";
 import { getCookie } from "@/util/cookie.util";
-import { fetcherWithToken, request } from "@/util/request";
+import { fetcherWithToken } from "@/util/request";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -38,12 +39,14 @@ const WithAuth = (Component: any) => {
 					}
 				} catch (error) {
 					console.log("error", error);
+					router.push("/login");
 				}
 			};
 			getUser();
 		}, [isLoggedIn, router]);
 
-		return isAuth ? <Component {...props} /> : null; // Render whatever you want while the authentication occurs
+		// isAuth && router.push("/login");
+		return isAuth ? <Component {...props} /> : <Login />; // Render whatever you want while the authentication occurs
 	};
 
 	return AuthenticatedComponent;

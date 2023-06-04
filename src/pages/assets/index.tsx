@@ -42,12 +42,10 @@ function MarketPlace(props: Props) {
 	// 모델 리스트 호출
 	const getModelList = async () => {
 		try {
-			const model = await axios.get(
-				"https://startail12-api.cpslab.or.kr/call?type=model_list",
-			);
-			const category = await axios.get(
-				"https://startail12-api.cpslab.or.kr/call?type=get_category",
-			);
+			const [model, category] = await Promise.all([
+				axios.get("https://startail12-api.cpslab.or.kr/call?type=model_list"),
+				axios.get("https://startail12-api.cpslab.or.kr/call?type=get_category"),
+			]);
 
 			setCategory(category.data);
 			setModel(model.data);
@@ -63,7 +61,7 @@ function MarketPlace(props: Props) {
 				<meta name="description" content="assets page" />
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
-			<div className="flex m-4">
+			<div className="flex m-4 h-[calc(100vh-12em)]">
 				<div className="flex flex-col">
 					{/* Filter */}
 					<h2 className="mb-2 text-lg font-bold border-b border-sky-500 ">

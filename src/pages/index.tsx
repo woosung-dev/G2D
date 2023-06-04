@@ -21,12 +21,10 @@ export default function Home() {
 
 	const getList = async () => {
 		try {
-			const new_list = await axios.get(
-				`https://startail12-api.cpslab.or.kr/call?type=new_list`,
-			);
-			const hot_list = await axios.get(
-				`https://startail12-api.cpslab.or.kr/call?type=hot_list`,
-			);
+			const [new_list, hot_list] = await Promise.all([
+				axios.get(`https://startail12-api.cpslab.or.kr/call?type=new_list`),
+				axios.get(`https://startail12-api.cpslab.or.kr/call?type=hot_list`),
+			]);
 
 			setNewList({ category: "New List", data: new_list.data });
 			setHotList({ category: "Hot List", data: hot_list.data });
@@ -49,17 +47,6 @@ export default function Home() {
 			</section>
 			<section className="text-gray-600 body-font">
 				<div className="container px-5 py-24 mx-auto">
-					{/* <div>
-						{TempData.map((v, index) => {
-							return (
-								<CarouselPosts
-									key={index}
-									category={v.category}
-									data={v.data}
-								/>
-							);
-						})}
-					</div> */}
 					<div>
 						{newList && (
 							<CarouselPosts category={newList.category} data={newList.data} />
@@ -73,73 +60,3 @@ export default function Home() {
 		</>
 	);
 }
-
-// getStaticprops is used to (category별 n가지씩 가져오도록 요청)
-export const TempData = [
-	{
-		category: "Featured",
-		data: [
-			{ name: "one" },
-			{ name: "two" },
-			{ name: "three" },
-			{ name: "four" },
-			{ name: "five" },
-			{ name: "six" },
-		],
-	},
-	{
-		category: "Hottest",
-		data: [
-			{ name: "one" },
-			{ name: "two" },
-			{ name: "three" },
-			{ name: "four" },
-			{ name: "five" },
-			{ name: "six" },
-		],
-	},
-	{
-		category: "Newest",
-		data: [
-			{ name: "one" },
-			{ name: "two" },
-			{ name: "three" },
-			{ name: "four" },
-			{ name: "five" },
-			{ name: "six" },
-		],
-	},
-	{
-		category: "Featured",
-		data: [
-			{ name: "one" },
-			{ name: "two" },
-			{ name: "three" },
-			{ name: "four" },
-			{ name: "five" },
-			{ name: "six" },
-		],
-	},
-	{
-		category: "Most Popular Prompts This Week Explore All",
-		data: [
-			{ name: "one" },
-			{ name: "two" },
-			{ name: "three" },
-			{ name: "four" },
-			{ name: "five" },
-			{ name: "six" },
-		],
-	},
-	{
-		category: "Most Popular Prompts This Month",
-		data: [
-			{ name: "one" },
-			{ name: "two" },
-			{ name: "three" },
-			{ name: "four" },
-			{ name: "five" },
-			{ name: "six" },
-		],
-	},
-];

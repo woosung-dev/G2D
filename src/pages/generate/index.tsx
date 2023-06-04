@@ -174,10 +174,6 @@ function G2D() {
 			);
 			console.log("resp", resp); //check
 
-			// TODO: 파일 확장자 확인 해당 형식으로 받아올 수 있도록
-			// setFile3D(new File([resp.data], "3D_IMAGE"));
-			// setImgTemp(resp.data);
-			// fileDownload(resp.data, "3D-object-file.ply");
 			setIsSaveBtn(true);
 			setImg3D(resp.data);
 		} catch (error: any) {
@@ -206,26 +202,11 @@ function G2D() {
 		}
 	};
 
-	// 파일 date 이미지에 표시하기 위한 설정 로직
-	// const viewFile2D = (resp: any) => {
-	// 	// TODO: 정확한 동작 확인 필요
-	// 	const result = "2D_IMAGE";
-	// 	const newFile = new File([resp.data], result);
-
-	// 	setFile(newFile);
-	// 	const reader = new FileReader();
-	// 	reader.onload = (event) => {
-	// 		const previewImage = String(event.target?.result);
-	// 		console.log(previewImage);
-
-	// 		setImgPreview(previewImage);
-	// 	};
-	// 	reader.readAsDataURL(newFile);
-	// };
-
 	const handleOnKeyPress = (event: any) => {
 		if (event.key === "Enter") {
-			onSubmitText(text); // Enter 입력이 되면 클릭 이벤트 실행
+			btnType === "submit"
+				? onSubmitText(text) // Enter 입력이 되면 클릭 이벤트 실행
+				: onSubmitModifyGenerate();
 		}
 	};
 
@@ -247,7 +228,7 @@ function G2D() {
 									<div className="flex items-center justify-center w-full gap-3 mt-4 ml-auto">
 										<label className="font-medium ">Chose Model</label>
 										<select
-											className="w-48 p-2 bg-white border border-gray-300 form-select"
+											className="w-48 p-2 bg-white border border-gray-300 form-select dark:text-gray-500"
 											defaultValue={"none"}
 											value={modelName}
 											onChange={(e) => setModelName(e.target.value)}
@@ -314,7 +295,7 @@ function G2D() {
 															alt="img-preview"
 															width={600}
 															height={600}
-															unoptimized={true}
+															unoptimized
 														/>
 														<button
 															className="px-4 py-2 ml-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
@@ -352,7 +333,7 @@ function G2D() {
 						<div className={style["input-wrapper"]}>
 							<input
 								type="text"
-								className="flex flex-grow p-2 border bg-gray-50 rounded-3xl focus:border-gray-200"
+								className="flex flex-grow p-2 border bg-gray-50 rounded-3xl focus:border-gray-200 dark:text-gray-500"
 								onChange={(e) => setText(e.target.value)}
 								onKeyDown={(e) => handleOnKeyPress(e)}
 								placeholder="send a message..."
