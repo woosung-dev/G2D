@@ -1,5 +1,5 @@
 // @flow
-import { IPostCard } from "@/component/carousel/PostCard";
+import PostCard, { IPostCard } from "@/component/carousel/PostCard";
 import axios from "axios";
 import dayjs from "dayjs";
 import Head from "next/head";
@@ -61,7 +61,7 @@ function MarketPlace(props: Props) {
 				<meta name="description" content="assets page" />
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
-			<div className="flex m-4 h-[calc(100vh-12em)]">
+			<div className="grid m-4 min-h-[calc(100vh-12em)] sm:flex">
 				<div className="flex flex-col">
 					{/* Filter */}
 					<h2 className="mb-2 text-lg font-bold border-b border-sky-500 ">
@@ -106,7 +106,7 @@ function MarketPlace(props: Props) {
 						</span>
 					))}
 				</div>
-				<div className="w-full mx-5">
+				<div className="w-full p-5">
 					<ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6">
 						{/* filter 결과 반환 */}
 						{articles
@@ -121,35 +121,7 @@ function MarketPlace(props: Props) {
 								return false;
 							})
 							.map((t, i) => (
-								<div key={i}>
-									<Link href={`/assets/${t.item_id}`}>
-										<article className="overflow-hidden rounded-md shadow-md hover:shadow-xl">
-											<Image
-												className="w-full"
-												src={`https://startail12-api.cpslab.or.kr/static/${t.Image_path}`}
-												alt={"title"}
-												width={300}
-												height={200}
-											/>
-											<div className="flex flex-col items-center p-4">
-												<time className="self-end text-gray-700">
-													{t.create_time
-														? dayjs(t.create_time).format("YYYY-MM-DD")
-														: dayjs().format("YYYY-MM-DD")}
-												</time>
-												<h3 className="text-lg font-bold">
-													{t.title ?? "title"}
-												</h3>
-												<p className="w-full text-center truncate">
-													{t.description ?? "description"}
-												</p>
-												<span className="px-2 my-2 text-sm bg-green-100 rounded-lg">
-													{t.category ?? "category"}
-												</span>
-											</div>
-										</article>
-									</Link>
-								</div>
+								<PostCard key={i} post={t} />
 							))}
 					</ul>
 				</div>

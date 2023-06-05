@@ -53,7 +53,9 @@ export default function PostCard({
 						? dayjs(create_time).format("YYYY-MM-DD")
 						: dayjs().format("YYYY-MM-DD")}
 				</time>
-				<h3 className="text-lg font-bold">{title ?? "title"}</h3>
+				<h3 className="w-full text-lg font-bold truncate">
+					{title ?? "title"}
+				</h3>
 				<p className="w-full text-center truncate">
 					{description ?? "description"}
 				</p>
