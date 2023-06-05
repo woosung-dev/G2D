@@ -11,6 +11,7 @@ import { success } from "@/util/toastify";
 import Image from "next/image";
 import gd from "../../../public/guideline.png";
 import MViewer from "@/component/modelViewer";
+import { MarkDownHtml } from "@/component/markdown";
 
 function G2D() {
 	const [text, setText] = useState<string>("");
@@ -257,9 +258,13 @@ function G2D() {
 							{recommend && (
 								<>
 									<div className={style["content-wrapper"]}>
-										<div className={style["content-category"]}>
+										<div className={style["content-details"]}>
 											{/* category 응답 위치 넘어가면 잘림... TODO: 해당 부분 처리 확인 후*/}
-											<span>{recommend.recommend}</span>
+											<span>
+												<MarkDownHtml
+													value={recommend.recommend.replaceAll("\n", "<br />")}
+												/>
+											</span>
 										</div>
 										<div className={style["content-details"]}>
 											{/* detail 응답 위치 map을 돌면서 값 표시 p*/}
