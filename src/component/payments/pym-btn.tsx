@@ -1,6 +1,7 @@
 // @flow
 import * as React from "react";
 import { loadTossPayments } from "@tosspayments/payment-sdk";
+import { success } from "../../util/toastify";
 
 type Props = {
 	orderId?: string;
@@ -9,6 +10,7 @@ type Props = {
 	failureUrl?: string;
 	children?: React.ReactNode;
 	amount?: number;
+	onSuccessFn?: () => void;
 };
 export const PaymentBtn = ({
 	orderId,
@@ -17,6 +19,7 @@ export const PaymentBtn = ({
 	failureUrl,
 	children,
 	amount,
+	onSuccessFn,
 }: Props) => {
 	const handleClick = async () => {
 		const tossPayments = await loadTossPayments(
@@ -31,6 +34,8 @@ export const PaymentBtn = ({
 			successUrl: successUrl ?? `${window.location.origin}/api/payments`,
 			failUrl: failureUrl ?? `${window.location.origin}/api/payments/fail`,
 		});
+
+		onSuccessFn && (await onSuccessFn());
 	};
 	return (
 		<div>

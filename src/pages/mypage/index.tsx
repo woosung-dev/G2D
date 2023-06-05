@@ -11,12 +11,14 @@ import React, { useEffect, useState } from "react";
 const MyPage = () => {
 	const { userData } = useUser();
 	const [myList, setMyList] = useState<IPostCard[]>();
-	useEffect(() => {
-		getMyList();
-	}, []);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [itemId, setItemId] = useState<string>("");
 	const [isModalsubmit, setIsModalsubmit] = useState(false);
+
+	useEffect(() => {
+		getMyList();
+		// 랜더링 다시 되도록 처리
+	}, [isModalsubmit]);
 
 	const getMyList = async () => {
 		try {

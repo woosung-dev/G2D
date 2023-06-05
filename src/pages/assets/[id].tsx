@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { IPostCard } from "@/component/carousel/PostCard";
 import Head from "next/head";
-import { errors } from "@/util/toastify";
+import { errors, success } from "@/util/toastify";
 import MViewer from "@/component/modelViewer";
 
 export default function AssetId() {
@@ -38,6 +38,20 @@ export default function AssetId() {
 			console.log(error);
 		} finally {
 			setIsLoading(false);
+		}
+	};
+
+	const onSuccessFn = async () => {
+		try {
+			await axios.get(
+				`https://startail12-api.cpslab.or.kr/call?type=download`,
+				{
+					params: { item_id: assets?.item_id },
+				},
+			);
+			success();
+		} catch (error) {
+			errors();
 		}
 	};
 
@@ -77,94 +91,9 @@ export default function AssetId() {
 								<h1 className="mb-1 text-3xl font-medium text-gray-900 title-font">
 									{assets?.title}
 								</h1>
-								<div className="flex mb-4">
+								<div className="flex mb-2">
 									<span className="flex items-center">
-										<svg
-											fill="currentColor"
-											stroke="currentColor"
-											strokeLinecap="round"
-											strokeLinejoin="round"
-											strokeWidth="2"
-											className="w-4 h-4 text-indigo-500"
-											viewBox="0 0 24 24"
-										>
-											<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-										</svg>
-										<svg
-											fill="currentColor"
-											stroke="currentColor"
-											strokeLinecap="round"
-											strokeLinejoin="round"
-											strokeWidth="2"
-											className="w-4 h-4 text-indigo-500"
-											viewBox="0 0 24 24"
-										>
-											<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-										</svg>
-										<svg
-											fill="currentColor"
-											stroke="currentColor"
-											strokeLinecap="round"
-											strokeLinejoin="round"
-											strokeWidth="2"
-											className="w-4 h-4 text-indigo-500"
-											viewBox="0 0 24 24"
-										>
-											<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-										</svg>
-										<svg
-											fill="currentColor"
-											stroke="currentColor"
-											strokeLinecap="round"
-											strokeLinejoin="round"
-											strokeWidth="2"
-											className="w-4 h-4 text-indigo-500"
-											viewBox="0 0 24 24"
-										>
-											<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-										</svg>
-										<svg
-											fill="none"
-											stroke="currentColor"
-											strokeLinecap="round"
-											strokeLinejoin="round"
-											strokeWidth="2"
-											className="w-4 h-4 text-indigo-500"
-											viewBox="0 0 24 24"
-										>
-											<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-										</svg>
-										<span className="ml-3 text-gray-600">
-											{assets?.viewcount} view
-										</span>
-									</span>
-									<span className="flex py-2 pl-3 ml-3 border-l-2 border-gray-200 space-x-2s">
-										<a className="text-gray-500">
-											<svg
-												fill="currentColor"
-												strokeLinecap="round"
-												strokeLinejoin="round"
-												strokeWidth="2"
-												className="w-5 h-5"
-												viewBox="0 0 24 24"
-											>
-												<path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
-											</svg>
-										</a>
-
-										<a className="text-gray-500">
-											<svg
-												fill="currentColor"
-												strokeLinecap="round"
-												strokeLinejoin="round"
-												strokeWidth="2"
-												className="w-5 h-5"
-												viewBox="0 0 24 24"
-											>
-												<path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"></path>
-											</svg>
-										</a>
-										<a className="text-gray-500">
+										<a className="flex gap-2 text-gray-500">
 											<svg
 												xmlns="http://www.w3.org/2000/svg"
 												fill="none"
@@ -184,16 +113,51 @@ export default function AssetId() {
 													d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
 												/>
 											</svg>
+											<span>{`${assets?.viewcount}`}</span>
+										</a>
+										<a className="flex gap-2 ml-2 text-gray-500">
+											<svg
+												fill="none"
+												stroke="currentColor"
+												strokeLinecap="round"
+												strokeLinejoin="round"
+												strokeWidth="2"
+												className="w-5 h-5"
+												viewBox="0 0 24 24"
+											>
+												<path d="M8 17l4 4 4-4m-4-5v9"></path>
+												<path d="M20.88 18.09A5 5 0 0018 9h-1.26A8 8 0 103 16.29"></path>
+											</svg>
+											<span>{`${assets?.downloadcount}`}</span>
+										</a>
+									</span>
+									<span className="flex py-2 pl-3 ml-3 border-l-2 border-gray-200 space-x-2s">
+										<a className="flex gap-2 text-gray-500">
+											<svg
+												fill="currentColor"
+												strokeLinecap="round"
+												strokeLinejoin="round"
+												strokeWidth="2"
+												className="w-5 h-5"
+												viewBox="0 0 24 24"
+											>
+												<path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
+											</svg>
+											<span>{`${0}`}</span>
 										</a>
 									</span>
 								</div>
 								<p className="leading-relaxed">{assets?.description}</p>
 								<div className="flex items-center pb-5 mt-6 mb-5 border-b-2 border-gray-100"></div>
 								<div className="flex justify-between">
-									<span className="text-2xl font-medium text-gray-900 title-font">
+									<h1 className="text-2xl font-medium text-gray-900 title-font dark">
 										{(assets?.price ?? 0).toLocaleString()} ₩
-									</span>
-									<PaymentBtn orderName={assets?.title} amount={assets?.price}>
+									</h1>
+									<PaymentBtn
+										orderName={assets?.title}
+										amount={assets?.price}
+										onSuccessFn={onSuccessFn}
+									>
 										<button className="flex px-6 py-2 ml-auto text-white bg-indigo-500 border-0 rounded focus:outline-none hover:bg-indigo-600">
 											Buy
 										</button>
