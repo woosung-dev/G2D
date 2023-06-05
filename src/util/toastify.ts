@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 export const success = (v?: string) =>
 	toast.success(`🦄 ${v ?? "success!"}`, {
 		position: "top-right",
-		autoClose: 5000,
+		autoClose: 4000,
 		hideProgressBar: false,
 		closeOnClick: true,
 		pauseOnHover: true,
@@ -17,7 +17,7 @@ export const success = (v?: string) =>
 export const errors = (v?: string) =>
 	toast.error(`🦄 ${v ?? "error!"}`, {
 		position: "top-right",
-		autoClose: 5000,
+		autoClose: 4000,
 		hideProgressBar: false,
 		closeOnClick: true,
 		pauseOnHover: true,
@@ -30,7 +30,7 @@ export const errors = (v?: string) =>
 export const warning = (v?: string) =>
 	toast.warn(`🦄 ${v ?? "warning!"}`, {
 		position: "top-right",
-		autoClose: 5000,
+		autoClose: 4000,
 		hideProgressBar: false,
 		closeOnClick: true,
 		pauseOnHover: true,
@@ -43,7 +43,7 @@ export const warning = (v?: string) =>
 export const info = (v?: string) =>
 	toast.info(`🦄 ${v ?? "info!"}`, {
 		position: "top-right",
-		autoClose: 10000,
+		autoClose: 6000,
 		hideProgressBar: false,
 		closeOnClick: true,
 		pauseOnHover: true,

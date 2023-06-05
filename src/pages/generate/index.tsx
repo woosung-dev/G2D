@@ -12,6 +12,7 @@ import Image from "next/image";
 import gd from "../../../public/guideline.png";
 import MViewer from "@/component/modelViewer";
 import { MarkDownHtml } from "@/component/markdown";
+import { info } from "@/util/toastify";
 
 function G2D() {
 	const [text, setText] = useState<string>("");
@@ -60,6 +61,14 @@ function G2D() {
 		}
 	};
 
+	const selectModel = (model: string) => {
+		setModelName(model);
+		info(
+			"생성 하고자 하는 object를 묘사하는 문장을 작성 후 submit 버튼을 눌러주세요.",
+		);
+		info("묘사가 부족한 부분과 예시가 챗봇을 통해 제공됩니다.");
+	};
+
 	// text to img 요청
 	const onSubmitText = async (search: string) => {
 		// model 같이 보내기 확인 후
@@ -76,6 +85,8 @@ function G2D() {
 			);
 			console.log(data); //check
 			setRecommend(data as RecommendType);
+			info("생성 하고자 하는 object와 가장 가까운 문장을 선택 해주세요.");
+			info("묘사한 문장을 토대로 챗봇이 이미지를 생성합니다.");
 		} catch (error: any) {
 			console.log(error);
 		} finally {
@@ -102,6 +113,12 @@ function G2D() {
 			// viewFile2D(resp);
 			setImg2D(resp.data);
 			setIsViewModifyBtn(true);
+			info(
+				"이미지 하단에 존재하는 Change Mode Modify 버튼을 클릭 후, 추가 적인 문장을 작성하여 이미지를 수정 할 수 있습니다.",
+			);
+			info(
+				"만족스러운 이미지라면 Change 3D 버튼을 통해 3D objects를 생성해 보세요! ~ ",
+			);
 		} catch (error: any) {
 			console.log(error);
 		} finally {
@@ -177,6 +194,7 @@ function G2D() {
 
 			setIsSaveBtn(true);
 			setImg3D(resp.data);
+			info("Save 버튼을 눌러 완성된 3D 모델을 저장하세요! ~");
 		} catch (error: any) {
 			console.log(error);
 		} finally {
@@ -232,7 +250,7 @@ function G2D() {
 											className="w-48 p-2 bg-white border border-gray-300 form-select dark:text-gray-500"
 											defaultValue={"none"}
 											value={modelName}
-											onChange={(e) => setModelName(e.target.value)}
+											onChange={(e) => selectModel(e.target.value)}
 										>
 											<option value="" selected disabled>
 												Choose a model!
