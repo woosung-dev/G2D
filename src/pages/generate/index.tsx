@@ -4,7 +4,6 @@ import axios from "axios";
 import { RecommendType } from "@/type/category.type";
 import useUser from "@/hooks/useUser";
 import { useRouter } from "next/router";
-import Model from "react-3dmodelx";
 import Head from "next/head";
 import WithAuth from "@/component/auth/withAuth";
 import { success } from "@/util/toastify";
@@ -20,7 +19,6 @@ function G2D() {
 	const [recommend, setRecommend] = useState<RecommendType>();
 	const [model, setModel] = useState<string[]>();
 	const [modelName, setModelName] = useState<string>("");
-	const [imgPreview, setImgPreview] = useState("");
 	const [img2D, setImg2D] = useState("");
 	const [img3D, setImg3D] = useState("");
 	const [imgTemp, setImgTemp] = useState<any>(); // string으로 올거라는 생각
@@ -41,8 +39,7 @@ function G2D() {
 		setIsSaveBtn(false);
 		setIsViewModifyBtn(false);
 		setImg2D("");
-		setImg2D("");
-		setImgPreview("");
+		setImg3D("");
 	};
 
 	// 모델 리스트 호출
@@ -90,7 +87,7 @@ function G2D() {
 		} catch (error: any) {
 			console.log(error);
 		} finally {
-			setTimeout(() => setIsolating(false), 2000);
+			setIsolating(false);
 		}
 	};
 
@@ -153,10 +150,7 @@ function G2D() {
 				formData,
 			);
 			console.log(resp); //check
-
-			// 파일 url변환 하여 imag표시를 위한 작업
-			// viewFile2D(resp);
-			setImgTemp(resp.data);
+			setImg2D(resp.data);
 		} catch (error: any) {
 			console.log(error);
 		} finally {
@@ -194,6 +188,7 @@ function G2D() {
 
 			setIsSaveBtn(true);
 			setImg3D(resp.data);
+			setImg2D(""); // 3d 생성 이후 2d 이미지를 바로 쓸일이 없고, Difustion을 통해 생성 해야되며, change 2d이미지를 제거 하기 위해 설정
 			info("Save 버튼을 눌러 완성된 3D 모델을 저장하세요! ~");
 		} catch (error: any) {
 			console.log(error);
@@ -236,12 +231,36 @@ function G2D() {
 				<meta name="description" content="generate page" />
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
-			<div className="h-[calc(100vh-12em)] container px-5 mx-auto">
+			{/* TODO: 높이 설정 부분 확인이 필요함... 좋은 설정 찾아보기 */}
+			<div className="min-h-[calc(100vh-12em)] container px-5 mx-auto flex">
 				<section className="flex flex-col min-h-full mx-auto my-8">
 					{isLoading ? (
-						<div className={style["layout-loading-container"]}>loading...</div>
+						<>
+							<div className="mt-6 mt-auto text-center">
+								<div className="inline-flex items-center justify-start gap-1">
+									<svg
+										role="status"
+										className="w-8 h-8 mr-2 text-gray-100 animate-spin fill-sky-600 dark:text-gray-600"
+										viewBox="0 0 100 101"
+										fill="none"
+										xmlns="http://www.w3.org/2000/svg"
+									>
+										<path
+											d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+											fill="currentColor"
+										></path>
+										<path
+											d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+											fill="currentFill"
+										></path>
+									</svg>
+									<span>Loading ......</span>
+								</div>
+							</div>
+						</>
 					) : (
 						<div className="flex justify-center">
+							{/* 모델 내임이 있을 경우 model을 선택한 이후 만 잠깐 표시됨 */}
 							{!modelName && (
 								<div className="flex flex-col gap-2">
 									<div className="flex items-center justify-center w-full gap-3 mt-4 ml-auto">
@@ -272,9 +291,14 @@ function G2D() {
 									</div>
 								</div>
 							)}
+							{/* <section className="grid min-h-full grid-cols-1 gap-4 mx-auto my-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2"></section> */}
 							{/* recommend가 있을 때만 표시 */}
 							{recommend && (
-								<>
+								<div
+									className={`grid min-h-full grid-cols-1 gap-4 mx-auto my-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 ${
+										!img2D && "!grid-cols-1"
+									}`}
+								>
 									<div className={style["content-wrapper"]}>
 										<div className={style["content-details"]}>
 											{/* category 응답 위치 넘어가면 잘림... TODO: 해당 부분 처리 확인 후*/}
@@ -320,34 +344,38 @@ function G2D() {
 															height={600}
 															unoptimized
 														/>
-														<button
-															className="px-4 py-2 ml-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
-															onClick={() => onSubmit3D()}
-														>
-															Change 3D
-														</button>
 													</div>
 												</>
 											)
 										)}
-										{isViewModifyBtn && (
-											<button
-												className="px-4 py-2 ml-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
-												onClick={() => setBtnType("modify")}
-											>
-												Change Mode Modify
-											</button>
-										)}
-										{isSaveBtn && (
-											<button
-												className="px-4 py-2 ml-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
-												onClick={() => onSave()}
-											>
-												Save
-											</button>
-										)}
+										<div className="flex items-center justify-around pt-3 pb-5">
+											{img2D && (
+												<button
+													className="px-4 py-2 ml-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
+													onClick={() => onSubmit3D()}
+												>
+													Change 3D
+												</button>
+											)}
+											{isViewModifyBtn && (
+												<button
+													className="px-4 py-2 ml-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
+													onClick={() => setBtnType("modify")}
+												>
+													Change Mode Modify
+												</button>
+											)}
+											{isSaveBtn && (
+												<button
+													className="px-4 py-2 ml-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
+													onClick={() => onSave()}
+												>
+													Save
+												</button>
+											)}
+										</div>
 									</div>
-								</>
+								</div>
 							)}
 						</div>
 					)}
@@ -356,7 +384,7 @@ function G2D() {
 						<div className={style["input-wrapper"]}>
 							<input
 								type="text"
-								className="flex flex-grow p-2 border bg-gray-50 rounded-3xl focus:border-gray-200 dark:text-gray-500"
+								className="flex flex-grow w-full p-2 border bg-gray-50 rounded-3xl focus:border-gray-200 dark:text-gray-500"
 								onChange={(e) => setText(e.target.value)}
 								onKeyDown={(e) => handleOnKeyPress(e)}
 								placeholder="send a message..."
