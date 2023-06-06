@@ -152,11 +152,13 @@ function G2D() {
 			console.log(resp); //check
 			setFile(data);
 			setImg2D(resp.data);
+
+			// 성공시 상태 초기화
+			setBtnType("submit");
+			setIsSaveBtn(false);
 		} catch (error: any) {
 			console.log(error);
 		} finally {
-			setBtnType("submit");
-			setIsSaveBtn(false);
 			setIsolating(false);
 		}
 	};
@@ -399,21 +401,21 @@ function G2D() {
 						<div className={style["input-wrapper"]}>
 							<input
 								type="text"
-								className="flex flex-grow w-full p-2 border bg-gray-50 rounded-3xl focus:border-gray-200 dark:text-gray-500"
+								className="flex-grow px-4 py-2 font-medium border-2 border-blue-400 rounded-lg resize-y placeholder-gray-600::placeholder focus:outline-none focus:border-blue-600"
 								onChange={(e) => setText(e.target.value)}
 								onKeyDown={(e) => handleOnKeyPress(e)}
 								placeholder="send a message..."
 							/>
 							{btnType === "submit" ? (
 								<button
-									className="px-4 py-2 ml-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
+									className="px-4 py-2 ml-2 font-bold text-white bg-blue-500 rounded-lg hover:bg-blue-700"
 									onClick={() => onSubmitText(text)}
 								>
 									submit
 								</button>
 							) : (
 								<button
-									className="px-4 py-2 ml-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
+									className="px-4 py-2 ml-2 font-bold text-white bg-blue-500 rounded-lg hover:bg-blue-700"
 									onClick={() => onSubmitModifyGenerate()}
 								>
 									Modify
