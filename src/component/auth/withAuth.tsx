@@ -2,6 +2,7 @@ import useUser from "@/hooks/useUser";
 import Login from "@/pages/login";
 import { getCookie } from "@/util/cookie.util";
 import { fetcherWithToken } from "@/util/request";
+import { info } from "@/util/toastify";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -38,6 +39,7 @@ const WithAuth = (Component: any) => {
 						setIsAuth(true);
 					}
 				} catch (error) {
+					info("Login is required");
 					console.log("error", error);
 					router.push("/login");
 				}

@@ -21,7 +21,6 @@ function G2D() {
 	const [modelName, setModelName] = useState<string>("");
 	const [img2D, setImg2D] = useState("");
 	const [img3D, setImg3D] = useState("");
-	const [imgTemp, setImgTemp] = useState<any>(); // string으로 올거라는 생각
 	const [file, setFile] = useState<File | null>();
 	const [file3D, setFile3D] = useState<File | null>();
 	const [btnType, setBtnType] = useState<"submit" | "modify">("submit");
@@ -198,6 +197,7 @@ function G2D() {
 		}
 	};
 
+	// 3D 이미지 저장
 	const onSave = async () => {
 		try {
 			setIsolating(true);
@@ -233,7 +233,7 @@ function G2D() {
 			</Head>
 			{/* TODO: 높이 설정 부분 확인이 필요함... 좋은 설정 찾아보기 */}
 			<div className="min-h-[calc(100vh-12em)] container px-5 mx-auto flex">
-				<section className="flex flex-col min-h-full mx-auto my-8">
+				<section className="flex flex-col w-full min-h-full mx-auto my-8">
 					{isLoading ? (
 						<>
 							<div className="mt-6 mt-auto text-center">
@@ -293,7 +293,7 @@ function G2D() {
 							)}
 							{/* <section className="grid min-h-full grid-cols-1 gap-4 mx-auto my-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2"></section> */}
 							{/* recommend가 있을 때만 표시 */}
-							{recommend && (
+							{recommend ? (
 								<div
 									className={`grid min-h-full grid-cols-1 gap-4 mx-auto my-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 ${
 										!img2D && "!grid-cols-1"
@@ -376,6 +376,15 @@ function G2D() {
 										</div>
 									</div>
 								</div>
+							) : (
+								<>
+									{/* 검색 화며에서도 보여야하는 항목 (입력 전이면서 모델선택이 된) */}
+									{modelName && (
+										<div className="mt-8">
+											<Image src={gd} alt={"가이드 라인"} />
+										</div>
+									)}
+								</>
 							)}
 						</div>
 					)}

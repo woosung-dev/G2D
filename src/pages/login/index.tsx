@@ -1,6 +1,6 @@
 import useUser from "@/hooks/useUser";
 import { setCookie } from "@/util/cookie.util";
-import { success } from "@/util/toastify";
+import { errors, success } from "@/util/toastify";
 import axios from "axios";
 import Head from "next/head";
 import Link from "next/link";
@@ -35,6 +35,7 @@ export default function Login() {
 			success("login success");
 			route.push("/");
 		} catch (error) {
+			errors("login error");
 			console.log(error);
 		}
 	};
