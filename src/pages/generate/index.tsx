@@ -107,6 +107,7 @@ function G2D() {
 			// 파일 url변환 하여 imag표시를 위한 작업
 			// setImgTemp(resp.data);
 			// viewFile2D(resp);
+			setImg3D("");
 			setImg2D(resp.data);
 			setIsViewModifyBtn(true);
 			info(
@@ -119,8 +120,7 @@ function G2D() {
 			console.log(error);
 		} finally {
 			setIsSaveBtn(false);
-			setImg3D("");
-			setTimeout(() => setIsolating(false), 2000);
+			setIsolating(false);
 		}
 	};
 
@@ -132,6 +132,7 @@ function G2D() {
 			formData.append("text", text);
 			formData.append("model_name", modelName);
 			formData.append("ID", userData.email ?? "woosung@gmail.com");
+			setImg3D("");
 			const { data } = await axios.get(
 				`https://startail12-api.cpslab.or.kr/static/${img2D}`,
 				{
@@ -142,7 +143,6 @@ function G2D() {
 					responseType: "blob",
 				},
 			);
-			setFile(data);
 			formData.append("Image", data); //setState 이전 처리한 값 로직 고려시 변경 가능성 있음
 
 			const resp = await axios.post(
@@ -150,14 +150,14 @@ function G2D() {
 				formData,
 			);
 			console.log(resp); //check
+			setFile(data);
 			setImg2D(resp.data);
 		} catch (error: any) {
 			console.log(error);
 		} finally {
 			setBtnType("submit");
 			setIsSaveBtn(false);
-			setImg3D("");
-			setTimeout(() => setIsolating(false), 2000);
+			setIsolating(false);
 		}
 	};
 
