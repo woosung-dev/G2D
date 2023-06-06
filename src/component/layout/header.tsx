@@ -14,7 +14,7 @@ export default function Header() {
 						className="flex items-center mb-4 font-medium text-gray-900 title-font md:mb-0"
 					>
 						<img src="/favicon.ico" alt="test-image" width={25} height={25} />
-						<span className="ml-3 text-xl">G2D</span>
+						<span className="ml-3 text-xl">Free3D</span>
 					</Link>
 					<nav className="flex flex-wrap items-center justify-center text-base cursor-pointer md:ml-auto">
 						{/* TODO: 클릭 및 드롭다운 가능하도록 변경 */}

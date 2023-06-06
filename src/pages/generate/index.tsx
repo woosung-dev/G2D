@@ -119,6 +119,7 @@ function G2D() {
 			console.log(error);
 		} finally {
 			setIsSaveBtn(false);
+			setImg3D("");
 			setTimeout(() => setIsolating(false), 2000);
 		}
 	};
@@ -155,6 +156,7 @@ function G2D() {
 		} finally {
 			setBtnType("submit");
 			setIsSaveBtn(false);
+			setImg3D("");
 			setTimeout(() => setIsolating(false), 2000);
 		}
 	};
@@ -320,7 +322,11 @@ function G2D() {
 															{value.prompt}
 														</button>
 														{": "}
-														<span>{value.detail}</span>
+														<span>
+															<MarkDownHtml
+																value={value.detail.replaceAll("\n", "<br />")}
+															/>
+														</span>
 													</div>
 												);
 											})}

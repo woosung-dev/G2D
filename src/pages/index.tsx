@@ -29,7 +29,7 @@ export default function Home() {
 			setNewList({ category: "New List", data: new_list.data });
 			setHotList({ category: "Hot List", data: hot_list.data });
 		} catch (error) {
-			errors();
+			// errors();
 			console.log(error);
 		}
 	};
