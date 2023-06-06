@@ -17,12 +17,12 @@ export default function Hero() {
 					describing the objects
 				</p>
 				<div className="flex justify-center">
-					<Link href={"/assets"}>
-						<button className="btn-project">Find objects</button>
+					<Link href={"/generate"}>
+						<button className="btn-project">Go Generate!</button>
 					</Link>
-					<Link href={"/mypage"}>
+					<Link href={"/assets"}>
 						<button className="inline-flex px-6 py-2 ml-4 text-lg text-gray-700 bg-gray-100 border-0 rounded focus:outline-none hover:bg-gray-200">
-							My Works
+							Marketplace
 						</button>
 					</Link>
 				</div>
