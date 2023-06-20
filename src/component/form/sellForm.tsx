@@ -1,6 +1,5 @@
 import { success, errors } from "@/util/toastify";
 import axios from "axios";
-import { useRouter } from "next/router";
 import React, { useState } from "react";
 type Props = {
 	itemId: string;
@@ -11,7 +10,6 @@ const SellForm = ({ itemId, onSubmit }: Props) => {
 	const [price, setPrice] = useState<string>();
 	const [description, setDescription] = useState<string>();
 	const [title, seTitle] = useState<string>();
-	const router = useRouter();
 
 	const onSellItem = async () => {
 		try {

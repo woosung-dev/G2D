@@ -12,6 +12,11 @@ type Props = {
 	amount?: number;
 	onSuccessFn?: () => void;
 };
+/**
+ * 결제 버튼 및 결제 요청 api 연동
+ * props로 결제 정보를 전달받아서 결제 요청, 없을시 더미 요청
+ * TODO: 추후 실결제 연동시 더미데이터 없이 결제 정보를 꼭 받아야 결제 가능하도록 변경
+ */
 export const PaymentBtn = ({
 	orderId,
 	orderName,

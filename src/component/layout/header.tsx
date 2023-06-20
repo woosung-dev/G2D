@@ -3,7 +3,7 @@ import DarkModeToggleButton from "../dark-mode-toggle-button";
 import useUser from "@/hooks/useUser";
 
 export default function Header() {
-	const { isLoggedIn, userData } = useUser();
+	const { isLoggedIn } = useUser();
 
 	return (
 		<>
@@ -17,15 +17,13 @@ export default function Header() {
 						<span className="ml-3 text-xl">Free3D</span>
 					</Link>
 					<nav className="flex flex-wrap items-center justify-center text-base cursor-pointer md:ml-auto">
-						{/* TODO: 클릭 및 드롭다운 가능하도록 변경 */}
 						<Link href={"/assets"} className="mr-5 hover:text-gray-900">
 							Marketplace
 						</Link>
 						<Link href={"/generate"} className="mr-5 hover:text-gray-900 ">
 							Generate
 						</Link>
-						{/* TODO: 클릭 및 드롭다운 가능하도록 변경 dark mode 해당 부분 안에 포함*/}
-						{/* TODO: login 상태에 따라서 변경 기본 Login 이후 mypage 나 accout */}
+						{/*login 상태에 따라서 변경 기본 Login 이후 mypage 나 accout */}
 						{!isLoggedIn ? (
 							<Link href={"/login"} className="mr-5 hover:text-gray-900">
 								Login

@@ -3,10 +3,11 @@ import Model from "react-3dmodelx";
 type Props = {
 	src: string;
 };
+/**
+ * @param param0 src 이미지 링크 (3d)
+ * @returns 확장자 파일에 따라서 그에 맞는 모델을 실행 시킴 지원 모델 [.ply, .obj]
+ */
 const MViewer = ({ src }: Props) => {
-	console.log(src);
-	console.log(src.slice(src.lastIndexOf(".")));
-
 	return (
 		<>
 			{src.slice(src.lastIndexOf(".")) === ".ply" && (

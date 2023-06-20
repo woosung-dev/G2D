@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 
 interface ModalProps {
 	isOpen: boolean;
@@ -59,23 +59,7 @@ const Modal: React.FC<ModalProps> = ({
 								/>
 							</svg>
 						</button>
-						{/* <h2 className="mb-2 text-lg font-bold">{title}</h2> */}
-						{/* <p className="mb-4">Modal content goes here.</p> */}
 						{children}
-						{/* <div className="flex gap-4">
-							<button
-								className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700"
-								onClick={closeModal}
-							>
-								Close
-							</button>
-							<button
-								className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700"
-								onClick={onSubmit}
-							>
-								submit
-							</button>
-						</div> */}
 					</div>
 				</div>
 			)}

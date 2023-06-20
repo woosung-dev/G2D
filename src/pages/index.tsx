@@ -4,7 +4,6 @@ import Hero from "@/component/home/hero";
 import CarouselPosts from "@/component/carousel/CarouselPosts";
 import axios from "axios";
 import { IPostCard } from "@/component/carousel/PostCard";
-import { errors } from "@/util/toastify";
 
 export default function Home() {
 	const [newList, setNewList] = useState<{
@@ -29,7 +28,6 @@ export default function Home() {
 			setNewList({ category: "New List", data: new_list.data });
 			setHotList({ category: "Hot List", data: hot_list.data });
 		} catch (error) {
-			// errors();
 			console.log(error);
 		}
 	};
